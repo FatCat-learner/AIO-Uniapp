@@ -1,0 +1,36 @@
+name: Deploy
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build H5
+        run: npm run build:h5
+
+      - name: Build WeChat Mini Program
+        run: npm run build:mp-weixin
+
+      - name: Upload to WeChat
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          npx uni build --platform mp-weixin \
+            --upload true \
+            --appid ${{ secrets.WX_APPID }} \
+            --privatekey ${{ secrets.WX_PRIVATE_KEY }} \
+            --version ${{ github.ref_name }} \
+            --description "CI auto deploy ${{ github.ref_name }}"
