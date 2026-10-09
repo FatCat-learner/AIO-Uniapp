@@ -1,15 +1,16 @@
 <template>
   <view class="content">
-    <image class="logo" src="/static/logo.png" />
+    <image class="logo" src="/static/images/logo.png" />
     <view class="text-area">
-      <text class="title">{{ title }}</text>
+      <text class="title">
+        {{ title }}
+      </text>
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue'
-  const title = ref('Hello')
+const title = ref('Haaaesaasllo');
 </script>
 
 <style>
@@ -21,12 +22,9 @@
   }
 
   .logo {
-    height: 200rpx;
     width: 200rpx;
-    margin-top: 200rpx;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 50rpx;
+    height: 200rpx;
+    margin: 200rpx auto 50rpx;
   }
 
   .text-area {

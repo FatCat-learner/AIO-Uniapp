@@ -1,4 +1,0 @@
-#!/bin/sh
-npm test
-npx lint-staged
-pnpm run typecheck

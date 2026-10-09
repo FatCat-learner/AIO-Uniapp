@@ -1,8 +1,8 @@
+import { fileURLToPath } from 'node:url';
+// @ts-expect-error — the plugin is provided at runtime but may lack local type declarations.
+import vue from '@vitejs/plugin-vue';
 // vitest.config.ts
-import { defineConfig } from 'vitest/config'
-// @ts-ignore — the plugin is provided at runtime but may lack local type declarations.
-import vue from '@vitejs/plugin-vue'
-import { fileURLToPath } from 'node:url'
+import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   plugins: [vue()],
@@ -28,4 +28,4 @@ export default defineConfig({
       },
     },
   },
-})
+});

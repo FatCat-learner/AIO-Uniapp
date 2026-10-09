@@ -1,35 +1,23 @@
-// eslint.config.mjs
-import js from '@eslint/js'
-import tseslint from 'typescript-eslint'
-import pluginVue from 'eslint-plugin-vue'
-import pluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
-import globals from 'globals'
+import antfu from '@antfu/eslint-config';
 
-export default defineConfig(
-  // [1] 忽略编译产物和静态资源
+export default antfu(
   {
+    unocss: true,
+    node: true,
     ignores: [
       'dist/**',
-      'unpackage/**',
+      '.vscode/**',
+      '.idea/**',
       'node_modules/**',
-      'static/**',
-      'commitlint.config.cjs', // 新增
-      '.eslintrc.*',
-      'eslint.config.mjs',
-      'vitest.config.ts',
-      'vite.config.ts',
+      'src/uni_modules/**',
+      'src/manifest.json',
+      'src/pages.json',
+      'README.md',
     ],
   },
-
-  // [2] JS 基础规则 + uni-app 全局变量
-  js.configs.recommended,
   {
     languageOptions: {
-      ecmaVersion: 'latest',
-      sourceType: 'module',
       globals: {
-        ...globals.browser,
-        ...globals.node,
         uni: 'readonly',
         wx: 'readonly',
         plus: 'readonly',
@@ -37,33 +25,62 @@ export default defineConfig(
       },
     },
   },
-
-  // [3] TypeScript 强类型支持
-  ...tseslint.configs.recommended,
-
-  // [4] Vue 3 核心规范
-  ...pluginVue.configs['flat/recommended'],
   {
-    files: ['**/*.vue'],
-    languageOptions: {
-      parserOptions: {
-        parser: tseslint.parser,
-      },
-    },
     rules: {
-      'vue/multi-word-component-names': 'off', // uni-app 页面名通常为单词
-      'vue/html-indent': ['error', 2],
-      'vue/max-attributes-per-line': [
+      // vue顶级标签的顺序
+      'vue/block-order': [
         'error',
         {
-          singleline: { max: 3 },
-          multiline: { max: 1 },
+          order: ['template', 'script', 'style'],
         },
       ],
-      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+      // 需要尾随逗号
+      'comma-dangle': ['error', 'only-multiline'],
+      // 允许console
+      'no-console': 'off',
+      // 需要分号
+      'style/semi': ['error', 'always'],
+      // 块内的空行
+      'padded-blocks': ['error', 'never'],
+      // 顶级函数应使用 function 关键字声明
+      'antfu/top-level-function': 'off',
+      // 全局的 process 不能用
+      'node/prefer-global/process': 'off',
+      // 禁止未使用的捕获组
+      'regexp/no-unused-capturing-group': 'off',
+      // 允许接口和类型别名中的成员之间使用三个分隔符
+      'style/member-delimiter-style': [
+        'error',
+        {
+          multiline: {
+            delimiter: 'semi',
+            requireLast: true,
+          },
+          singleline: {
+            delimiter: 'semi',
+            requireLast: false,
+          },
+          multilineDetection: 'brackets',
+        },
+      ],
+      // if 语句后需要换行
+      'antfu/if-newline': 'off',
+      // 禁止必需的props属性同时设置默认值
+      'vue/no-required-prop-with-default': 'off',
     },
   },
-
-  // [5] Prettier 冲突处理：必须放在最后一行
-  pluginPrettierRecommended,
-)
+  {
+    // typescript-eslint 的未使用变量规则在纯 JS 文件上会误报，改用 ESLint 内置规则
+    files: ['**/*.{js,cjs,mjs}'],
+    rules: {
+      'unused-imports/no-unused-vars': 'off',
+      'no-unused-vars': ['error', { args: 'after-used', argsIgnorePattern: '^_', vars: 'all', varsIgnorePattern: '^_' }],
+    },
+  },
+  {
+    files: ['**/*.vue'],
+    rules: {
+      'vue/multi-word-component-names': 'off',
+    },
+  },
+);

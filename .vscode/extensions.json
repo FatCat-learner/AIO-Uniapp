@@ -2,7 +2,7 @@
   "recommendations": [
     "vue.volar",
     "dbaeumer.vscode-eslint",
-    "esbenp.prettier-vscode",
-    "vitest.explorer"
+    "vitest.explorer",
+       "antfu.unocss", // 一款零配置的 CSS 框架
   ]
 }

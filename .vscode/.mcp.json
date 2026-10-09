@@ -1,0 +1,8 @@
+{
+  "servers": {
+    "my-mcp-server-30f7eee4": {
+      "type": "http",
+      "url": "http://localhost:9527/__mcp/sse"
+    }
+  }
+}
