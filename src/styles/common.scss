@@ -1,5 +1,160 @@
 page {
-  font-size: $u-font-base;
-  color: $u-main-color;
-  background-color: $u-bg-color;
+  font-size: $uni-font-size-base;
+  color: var(--text-1);
+  background-color: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+.page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 440px;
+  height: 100vh;
+  overflow: hidden;
+  margin: 0 auto;
+  background-color: var(--bg);
+}
+
+
+/**
+ * 全局按压反馈
+ * hover-class 在小程序端只会去全局样式里找类，写在 scoped 里会失效，
+ * 所以统一在这里定义，各组件直接 hover-class="u-hover"。
+ */
+.u-hover {
+  opacity: 0.72;
+}
+
+/* H5：隐藏原生滚动条，悬浮 Dock 下方露出的内容才干净 */
+.uni-scroll-view::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* 通用单行省略 */
+.u-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ============================================================
+ * 全项目通用规范类（UI 规范 V1.1 §4.2 / §4.7 / §4.9 / §4.11）
+ * 只收录「跨页面复用且样式固定」的规则；一次性样式留在页面里。
+ * 命名用 a- 前缀，避开 uview-plus 的 u- 与 unocss 的原子类。
+ * ============================================================ */
+
+/* 卡片头：左 15/600 标题，右 11 灰说明或 tint 胶囊，两端对齐 */
+.a-card-hd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+}
+
+.a-card-title {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 20px;
+  color: var(--text-1);
+}
+
+/* 卡头右侧说明文字（「共 2 次 · 1,860 千卡」「2026/10/20 更新」） */
+.a-card-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 11px;
+  line-height: 14px;
+  color: var(--text-3);
+  white-space: nowrap;
+}
+
+/* 分隔线：1px #232833；需要一个分隔线类而不是到处写 border-top */
+.a-divider {
+  height: 1px;
+  background-color: var(--line);
+}
+
+/* 胶囊：28 高（导航）/ 32 高（卡头 tint 胶囊），底为模块色 12% */
+.a-pill {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--sp-1);
+  height: var(--pill-h);
+  padding: 0 10px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--text-2);
+  background-color: var(--tint-neutral);
+  border-radius: var(--radius-full);
+}
+
+.a-pill--lg {
+  height: var(--pill-h-lg);
+  padding: 0 12px;
+  font-size: 12px;
+}
+
+.a-pill--brand {
+  color: var(--brand-500);
+  background-color: var(--brand-50);
+}
+
+.a-pill--train {
+  color: var(--mod-train);
+  background-color: var(--tint-train);
+}
+
+.a-pill--cardio {
+  color: var(--mod-cardio);
+  background-color: var(--tint-cardio);
+}
+
+.a-pill--diet {
+  color: var(--mod-diet);
+  background-color: var(--tint-diet);
+}
+
+.a-pill--body {
+  color: var(--mod-body);
+  background-color: var(--tint-body);
+}
+
+.a-pill--social {
+  color: var(--mod-social);
+  background-color: var(--tint-social);
+}
+
+/* 等宽数字：数值变化（倒计时、容量）时不抖动 */
+.a-num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+}
+
+/* 虚线槽：预约卡 / 空态 / 「+ 添加卡片」 */
+.a-dashed {
+  border: 1px dashed var(--line-dashed);
+  border-radius: var(--radius-lg);
+}
+
+/* 品牌色「更多 / 去安排」文字链接 */
+.a-link {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 2px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 18px;
+  color: var(--brand-500);
+}
+
+.a-highlight {
+  color: var(--brand-500);
+  letter-spacing:0;
 }

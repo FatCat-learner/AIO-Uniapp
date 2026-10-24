@@ -12,6 +12,11 @@ node_modules
 dist
 *.local
 
+# Build output / temp files
+unpackage
+coverage
+*.timestamp-*.mjs
+
 # Editor directories and files
 .idea
 *.suo
@@ -19,3 +24,6 @@ dist
 *.njsproj
 *.sln
 *.sw?
+unpackage
+coverage
+*.timestamp-*.mjs

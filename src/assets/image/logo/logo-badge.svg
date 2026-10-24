@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" role="img" aria-label="AIOSport">
+  <title>AIOSport app icon</title>
+  <defs>
+    <linearGradient id="aio-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#151C11"/>
+      <stop offset=".55" stop-color="#0B0F0C"/>
+      <stop offset="1" stop-color="#050806"/>
+    </linearGradient>
+    <radialGradient id="aio-glow" cx="512" cy="452" r="520" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#C9F03A" stop-opacity=".20"/>
+      <stop offset=".55" stop-color="#C9F03A" stop-opacity=".06"/>
+      <stop offset="1" stop-color="#C9F03A" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="aio-clip"><rect width="1024" height="1024" rx="232"/></clipPath>
+  </defs>
+  <g clip-path="url(#aio-clip)">
+    <rect width="1024" height="1024" fill="url(#aio-bg)"/>
+    <rect width="1024" height="1024" fill="url(#aio-glow)"/>
+    <g transform="translate(16.4537 47.4253) scale(20.6478)" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 33 24 12 36 33" stroke="#C9F03A" stroke-width="3.6"/>
+      <path d="M18 33 24 23 30 33" stroke="#C9F03A" stroke-opacity=".35" stroke-width="3"/>
+    </g>
+  </g>
+  <rect x="1" y="1" width="1022" height="1022" rx="231" stroke="#FFFFFF" stroke-opacity=".09" stroke-width="2"/>
+</svg>

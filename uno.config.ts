@@ -40,6 +40,87 @@ export default defineConfig({
     }) as Preset,
   ],
   /**
+   * AppIcon 组件是「i-mdi-${name}」动态拼类名，扫描器看不见，
+   * 所以所有用到的 mdi 图标必须在这里登记（新增图标时同步加一行）。
+   * 对应规范 §3.5：底部 5 Tab + 训练按钮 + 常用操作图标。
+   */
+  safelist: [
+    // 账号与安全（登录 / 注册 / 忘记密码）
+    'i-mdi-menu-down',
+    'i-mdi-email-outline',
+    'i-mdi-lock-outline',
+    'i-mdi-eye-outline',
+    'i-mdi-eye-off-outline',
+    'i-mdi-phone-outline',
+    'i-mdi-check-circle',
+    'i-mdi-circle-outline',
+    'i-mdi-checkbox-marked',
+    'i-mdi-checkbox-blank-outline',
+    // TabBar（未选中 outline / 选中实心）
+    'i-mdi-home-outline',
+    'i-mdi-home',
+    'i-mdi-compass-outline',
+    'i-mdi-compass',
+    'i-mdi-chart-box-outline',
+    'i-mdi-chart-box',
+    'i-mdi-account-group-outline',
+    'i-mdi-account-group',
+    'i-mdi-account-outline',
+    'i-mdi-account',
+    // 训练按钮 / 悬浮气泡
+    'i-mdi-dumbbell',
+    'i-mdi-close',
+    'i-mdi-arrow-u-left-top',
+    // 导航与通用操作
+    'i-mdi-arrow-left',
+    'i-mdi-apple',
+    'i-mdi-chevron-left',
+    'i-mdi-chevron-right',
+    'i-mdi-bell-outline',
+    'i-mdi-message-outline',
+    'i-mdi-plus',
+    'i-mdi-magnify',
+    'i-mdi-pencil',
+    'i-mdi-play',
+    'i-mdi-close',
+    // 模块（力量 / 有氧 / 饮食 / 身体 / 睡眠）
+    'i-mdi-lightning-bolt',
+    'i-mdi-fire',
+    'i-mdi-run',
+    'i-mdi-food-apple-outline',
+    'i-mdi-scale-bathroom',
+    'i-mdi-bed-outline',
+    'i-mdi-timer-outline',
+    'i-mdi-water-outline',
+    'i-mdi-map-marker-path',
+    // 我的 / 设置
+    'i-mdi-target',
+    'i-mdi-bluetooth',
+    'i-mdi-book-open-page-variant-outline',
+    'i-mdi-view-dashboard-outline',
+    'i-mdi-shield-lock-outline',
+    // 探索页（搜索即入口）：品类选择器 / 拍照识别 / AI
+    'i-mdi-camera-outline',
+    'i-mdi-chevron-down',
+    'i-mdi-close-circle',
+    'i-mdi-check',
+    'i-mdi-calendar-blank-outline',
+    'i-mdi-creation',
+    'i-mdi-heart-outline',
+    // 首页 v2（卡片流 + 训练结果 §5.1）：置顶指标 / 训练结果 / 饮食快捷行 / 预约 / AI 教练
+    'i-mdi-walk',
+    'i-mdi-bike',
+    'i-mdi-coffee-outline',
+    'i-mdi-bowl-mix',
+    'i-mdi-food-variant',
+    'i-mdi-cookie',
+    'i-mdi-water',
+    'i-mdi-robot-outline',
+    'i-mdi-chart-line',
+    'i-mdi-cog-outline',
+    'i-mdi-yoga',
+  ],
+  /**
    * 自定义快捷语句
    * @see https://github.com/unocss/unocss#shortcuts
    */

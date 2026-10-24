@@ -10,9 +10,18 @@ import { AutoImportPlugin } from './autoImport';
 // import { ReplaceUrlPlugin } from './replaceUrl';
 import { AutoComponentsPlugin } from './component';
 import { MCPPlugin } from './mcp';
+import { MockPlugin } from './mock';
 import { UnoCSSPlugin } from './unocss';
 
-export default function createVitePlugins(isBuild: boolean) {
+/** env 里与 mock 相关的开关 */
+type EnvLike = Record<string, string | undefined>;
+
+export default function createVitePlugins(isBuild: boolean, env: EnvLike = {}) {
+  // 开发环境默认开启 mock；env/.env.development 里写 VITE_APP_MOCK=false 关闭
+  const mockEnabled = !isBuild && env.VITE_APP_MOCK !== 'false';
+  // 需要看请求命中情况时打开 VITE_APP_MOCK_LOG=true
+  const mockLogger = env.VITE_APP_MOCK_LOG === 'true';
+
   const vitePlugins: (PluginOption | PluginOption[])[] = [
     // UnoCSS配置
     UnoCSSPlugin(),
@@ -20,6 +29,8 @@ export default function createVitePlugins(isBuild: boolean) {
     AutoImportPlugin(),
     // 自动按需引入组件(注意：需注册至 uni 之前，否则不会生效)
     AutoComponentsPlugin(),
+    // 接口 mock（mocks/ 目录，vite-plugin-mock + faker）
+    MockPlugin(mockEnabled, mockLogger),
     // uni支持(兼容性写法，当type为module时，必须要这样写)
     (UniPlugin as any).default(),
     ViteRestart({

@@ -1,17 +1,111 @@
 {
+  "easycom": {
+    "autoscan": true
+  },
   "pages": [
-    // pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
     {
       "path": "pages/index/index",
       "style": {
-        "navigationBarTitleText": "uni-app"
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "首页",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/discover/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "探索",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/data/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "数据",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/community/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "社区",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/profile/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "我的",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/welcome/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "首屏",
+        "enablePullDownRefresh": false,
+        "app-plus": {
+          "bounce": "none"
+        }
+      }
+    },
+    {
+      "path": "pages/login/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "登录",
+        "enablePullDownRefresh": false,
+        "app-plus": {
+          "bounce": "none"
+        }
+      }
+    },
+    {
+      "path": "pages/code-login/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "验证码登录",
+        "enablePullDownRefresh": false,
+        "app-plus": {
+          "bounce": "none"
+        }
+      }
+    },
+    {
+      "path": "pages/register/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "注册",
+        "enablePullDownRefresh": false,
+        "app-plus": {
+          "bounce": "none"
+        }
+      }
+    },
+    {
+      "path": "pages/reset-password/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "忘记密码",
+        "enablePullDownRefresh": false,
+        "app-plus": {
+          "bounce": "none"
+        }
       }
     }
   ],
   "globalStyle": {
-    "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "uni-app",
-    "navigationBarBackgroundColor": "#F8F8F8",
-    "backgroundColor": "#F8F8F8"
+    "navigationStyle": "custom",
+    "navigationBarTitleText": "AIO 运动助手",
+    "navigationBarTextStyle": "white",
+    "navigationBarBackgroundColor": "#0B0D12",
+    "backgroundColor": "#0B0D12",
+    "backgroundColorTop": "#0B0D12",
+    "backgroundColorBottom": "#0B0D12"
   }
 }

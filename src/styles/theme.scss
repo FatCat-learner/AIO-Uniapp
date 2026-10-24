@@ -1,63 +1,278 @@
-// 主题CSS变量
+/**
+ * AIO 运动助手 · 设计令牌（Design Tokens）V1.1
+ * 依据：F:\Doc\UI\uxpilot-export-10-08-26.pdf（UXPilot 导出稿，5 页：Home / Discover / Health Data / Community / Profile）
+ *       → 深色画布 #0B0D12 + 卡面 #14171F + 荧光绿 #C9F03A
+ *       文档：AIO运动助手/AIO运动助手 UI设计规范 V1.1（Pixso AI）.md §3
+ *
+ * 用法约定：
+ * 1. 页面 / 组件只引用 var(--xxx)，禁止写死色值；
+ * 2. 换肤、调品牌色只改本文件，改 --brand-500 一处即可全站生效；
+ * 3. 旧的 --theme-* 变量全部保留，并指向新令牌，老组件不用改；
+ * 4. 默认即深色主题（PDF 稿）；浅色仅作可选，加 class="theme-light" 生效。
+ */
+
 :root,
 page {
-  // 主色调
-  --theme-primary: #21d59d;
-  --theme-success: #3ed268;
-  --theme-warning: #fe9831;
-  --theme-error: #fa4e62;
+  /* ==================== 品牌（荧光绿） ==================== */
+  --brand-500: #c9f03a; // 主色：主按钮 / 选中态 / 关键数值 / 训练
+  --brand-600: #b4dc22; // 按下态
+  --brand-700: #9cc414; // 深端 / 渐变
+  --brand-500-rgb: 201, 240, 58; // 供 rgba(var(--brand-500-rgb), .x)
+  --brand-50: rgba(201, 240, 58, 0.12); // 极浅品牌底：图标底、选中胶囊
+  --brand-100: rgba(201, 240, 58, 0.2); // 浅品牌底：进度环轨道、标签
+  --on-brand: #0b0d12; // 落在品牌色上的文字 / 图标（深底反白）
+  --ai-from: #c9f03a; // AI 渐变起点
+  --ai-to: #06b6d4; // AI 渐变终点
+  --gradient-ai: linear-gradient(135deg, var(--ai-from) 0%, var(--ai-to) 100%);
 
-  // 文字颜色
-  --theme-main-color: #1b233b;
-  --theme-content-color: #60687e;
-  --theme-tips-color: #7e869a;
-  --theme-light-color: #bdc3d2;
-  --theme-disabled-color: #dce0eb;
+  /* ==================== 模块色（图标底 / 分类 / 图表） ==================== */
+  --mod-train: #c9f03a; // 力量训练
+  --mod-cardio: #3b82f6; // 有氧（跑步 / 骑行 / 步行 / 徒步）
+  --mod-diet: #f97316; // 饮食
+  --mod-body: #a855f7; // 身体数据
+  --mod-social: #06b6d4; // 社区 / 路书
 
-  // 背景颜色
-  --theme-bg-color: #ffffff;
-  --theme-bg-color-secondary: #f8f9fa;
+  /* ==================== 营养（进度环 / 图例） ==================== */
+  --nut-p: #c9f03a; // 蛋白
+  --nut-c: #3b82f6; // 碳水
+  --nut-f: #f97316; // 脂肪
+  --nut-w: #06b6d4; // 饮水
 
-  // 边框颜色
-  --theme-border-color: #e9ecef;
+  /* ==================== 语义 ==================== */
+  --ok: #22c55e; // 达成 / 已保存
+  --warn: #f59e0b; // 超标 / 注意
+  --danger: #ef4444; // 删除 / 错误 / 退出登录
+  --info: #3b82f6; // 提示 / 中性信息
+  --danger-soft: rgba(239, 68, 68, 0.12); // 危险按钮底（Log Out 条）
+
+  /* ==================== 文字（深色底） ==================== */
+  --text-1: #ffffff; // 标题、数值、主信息
+  --text-2: #9aa2b0; // 正文、副标题、标签
+  --text-3: #6b7280; // 单位、时间戳、图例、占位
+  --text-disabled: #3f4653;
+  --on-dark: #0b0d12;
+
+  /* ==================== 背景 / 分割线 ==================== */
+  --bg: #0b0d12; // 页面底色（画布）
+  --surface: #14171f; // 卡片 / Sheet / 底部导航条
+  --surface-2: #1b1f29; // 卡内嵌套块（组行、内嵌卡）
+  --fill: #232833; // 输入框、序号方块、未选中 chip、标签底
+  --line: #232833; // 1px 描边 / 分隔线
+  --line-strong: #2e3546; // 强调描边（聚焦、选中卡）
+  --nav-bg: rgba(20, 23, 31, 0.86); // 悬浮 Dock 玻璃底（配合 backdrop-filter: blur(20px)）
+  --dock-bg: rgba(20, 23, 31, 0.86); // 同 nav-bg 的新名
+  --dock-w: 282px; // Dock 宽（390 宽机器；其余按 calc(100vw - 16 - 8 - 60 - 16) 自适应）
+  --dock-h: 60px; // Dock 高
+  --dock-inset: 16px; // Dock 左右边距
+  --dock-bottom: 12px; // Dock 距底（其下另加 34 安全区）
+  --dock-gap: 8px; // Dock 与训练按钮的间距
+  --content-inset-bottom: 108px; // 页面内容底部预留（60 + 12 + 34 + 2）
+  --mask: rgba(0, 0, 0, 0.6); // 弹层遮罩
+
+  /* ==================== 兼容旧命名（动作详情等沉浸页） ==================== */
+  --dark-bg: #0b0d12;
+  --dark-card: #14171f;
+  --dark-line: #232833;
+  --dark-text: #ffffff;
+  --dark-text-2: #9aa2b0;
+
+  /* ==================== 圆角 ==================== */
+  --radius-xs: 8px; // 小标签、角标
+  --radius-sm: 12px; // 图标底、输入框
+  --radius-md: 16px; // 组行、内嵌块、缩略图
+  --radius-lg: 20px; // 卡片（PDF 实测 ~20）
+  --radius-xl: 24px; // Sheet 顶部、大卡、Hero
+  --radius-xxl: 28px; // 更大卡片、模态框
+  --radius-full: 999px; // 按钮、Tab 胶囊、进度条
+
+  /* ==================== 阴影 / 发光 ==================== */
+  --shadow-card: none; // 深色下用描边与底色差分层，不用投影
+  --shadow-float: 0 12px 32px rgba(0, 0, 0, 0.55); // 悬浮气泡 / 弹层
+  --shadow-sheet: 0 -12px 40px rgba(0, 0, 0, 0.6); // BottomSheet
+  --glow: 0 0 24px rgba(var(--brand-500-rgb), 0.35); // FAB、进行中气泡
+  --ring-glow: 0 0 0 1px rgba(var(--brand-500-rgb), 0.5); // 选中描边
+
+  /* ==================== 字号（PDF 画板 1080pt ↔ 1440px，×4/3） ==================== */
+  --fs-display: 28px; // 计时器、大数值
+  --fs-h1: 24px; // 页面标题（Discover / Health Data）
+  --fs-h2: 20px; // 卡片大数值
+  --fs-h3: 17px; // 卡片标题、动作名
+  --fs-body: 15px; // 正文、列表主文案
+  --fs-base: 14px; // 卡片内正文
+  --fs-sm: 13px; // 次要说明
+  --fs-xs: 12px; // 单位、图例
+  --fs-2xs: 11px; // 角标、ALL CAPS 小标题
+
+  /* ==================== 间距（4/8pt 栅格） ====================
+   * 规范 §2：页面与卡内间距只用这几档，禁止 7/9/13/18 这类随手数。
+   */
+  --sp-0: 0px;
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+
+  /* ==================== 行高 ==================== */
+  --lh-tight: 1.15; // 大数值、页面标题
+  --lh-snug: 1.35; // 卡片标题、列表主文案
+  --lh-normal: 1.55; // 说明、正文多行
+
+  /* ==================== 布局常量（§4.1 页面骨架 / §4.3 卡片） ==================== */
+  --page-x: 16px; // 页面左右边距
+  --page-top: 14px; // 导航与首条内容的间距
+  --card-gap: 12px; // 卡片与卡片之间
+  --card-pad: 20px; // 标准卡内边距
+  --card-pad-sm: 16px; // 紧凑卡内边距
+  --row-h: 64px; // 卡内列表行高
+  --pill-h: 28px; // 普通胶囊（导航「连续 12 天」）
+  --pill-h-lg: 32px; // 卡头 tint 胶囊（智能秤 / 自定义）
+  --icon-btn: 40px; // 圆形图标按钮
+  --progress-h: 6px; // 进度条高度
+
+  /* ==================== 12% 模块色底（IconTile / 胶囊 / 进度轨道） ====================
+   * 规范 §4.5：图标底一律「模块色 12%」，禁止实色填充。
+   */
+  --tint-train: rgba(201, 240, 58, 0.12);
+  --tint-cardio: rgba(59, 130, 246, 0.12);
+  --tint-diet: rgba(249, 115, 22, 0.12);
+  --tint-body: rgba(168, 85, 247, 0.12);
+  --tint-social: rgba(6, 182, 212, 0.12);
+  --tint-neutral: rgba(154, 162, 176, 0.12);
+  --line-dashed: #3f4653; // 虚线卡（预约 / 空态 / 添加卡片）
+
+  /* ==================== 旧变量兼容（勿删） ==================== */
+  --theme-primary: var(--brand-500);
+  --theme-success: var(--ok);
+  --theme-warning: var(--warn);
+  --theme-error: var(--danger);
+
+  --theme-main-color: var(--text-1);
+  --theme-content-color: var(--text-2);
+  --theme-tips-color: var(--text-3);
+  --theme-light-color: var(--text-3);
+  --theme-disabled-color: var(--text-disabled);
+
+  --theme-bg-color: var(--bg);
+  --theme-bg-color-secondary: var(--surface);
+  --theme-border-color: var(--line);
 }
 
+/**
+ * 显式深色（默认即深色，此块保证在 .theme-light 作用域内切换回深色时能正确复原）
+ */
 .theme-dark {
-  // 主色调
-  --theme-primary: #3c9cff;
-  --theme-success: #5ac725;
-  --theme-warning: #f9ae3d;
-  --theme-error: #f56c6c;
+  --brand-500: #c9f03a;
+  --brand-600: #b4dc22;
+  --brand-500-rgb: 201, 240, 58;
+  --brand-50: rgba(201, 240, 58, 0.12);
+  --brand-100: rgba(201, 240, 58, 0.2);
+  --on-brand: #0b0d12;
 
-  // 文字颜色
-  --theme-main-color: #ffffff;
-  --theme-content-color: #b0b8c1;
-  --theme-tips-color: #8a8f95;
-  --theme-light-color: #6c757d;
-  --theme-disabled-color: #495057;
+  --text-1: #ffffff;
+  --text-2: #9aa2b0;
+  --text-3: #6b7280;
+  --text-disabled: #3f4653;
+  --on-dark: #0b0d12;
 
-  // 背景颜色
-  --theme-bg-color: #1a1a1a;
-  --theme-bg-color-secondary: #2d2d2d;
+  --bg: #0b0d12;
+  --surface: #14171f;
+  --surface-2: #1b1f29;
+  --fill: #232833;
+  --line: #232833;
+  --line-strong: #2e3546;
+  --nav-bg: rgba(20, 23, 31, 0.86);
+  --dock-bg: rgba(20, 23, 31, 0.86);
+  --mask: rgba(0, 0, 0, 0.6);
 }
 
-// 主题工具类
+/**
+ * 浅色主题（可选，非默认）：与深色共用语义名，只重定义「表面 / 文字 / 品牌」三层。
+ * 荧光绿在浅底对比不足，主色下沉到 --brand-500 → #A8CC22（品牌色的深端）。
+ * 旧变量通过 var() 级联，无需重复声明。
+ */
+.theme-light {
+  --brand-500: #a8cc22;
+  --brand-600: #97b81a;
+  --brand-500-rgb: 168, 204, 34;
+  --brand-50: rgba(168, 204, 34, 0.12);
+  --brand-100: rgba(168, 204, 34, 0.2);
+  --on-brand: #ffffff;
+
+  --text-1: #101828;
+  --text-2: #475467;
+  --text-3: #98a2b3;
+  --text-disabled: #d0d5dd;
+  --on-dark: #ffffff;
+
+  --bg: #f2f3f5;
+  --surface: #ffffff;
+  --surface-2: #f7f8fa;
+  --fill: #f1f2f4;
+  --line: #eaecf0;
+  --line-strong: #d0d5dd;
+  --nav-bg: rgba(255, 255, 255, 0.92);
+  --dock-bg: rgba(255, 255, 255, 0.92);
+  --mask: rgba(0, 0, 0, 0.4);
+  --line-dashed: #c9ced6;
+
+  --shadow-card: 0 1px 2px rgba(16, 24, 40, 0.04);
+  --glow: 0 0 24px rgba(var(--brand-500-rgb), 0.28);
+}
+
+/* ==================== 主题工具类 ==================== */
 .theme-bg {
-  background-color: var(--theme-bg-color);
+  background-color: var(--bg);
 }
 
-.theme-bg-secondary {
-  background-color: var(--theme-bg-color-secondary);
+.theme-surface {
+  background-color: var(--surface);
+}
+
+.theme-fill {
+  background-color: var(--fill);
+}
+
+.theme-line {
+  background-color: var(--line);
+}
+
+.theme-brand {
+  background-color: var(--brand-500);
+  color: var(--on-brand);
 }
 
 .theme-text {
-  color: var(--theme-main-color);
+  color: var(--text-1);
 }
 
 .theme-text-content {
-  color: var(--theme-content-color);
+  color: var(--text-2);
 }
 
 .theme-text-tips {
-  color: var(--theme-tips-color);
+  color: var(--text-3);
+}
+
+.theme-border {
+  border: 1px solid var(--line);
+}
+
+.theme-divider {
+  height: 1px;
+  background-color: var(--line);
+}
+
+.theme-gradient-ai {
+  background-image: var(--gradient-ai);
+}
+
+.theme-shadow-float {
+  box-shadow: var(--shadow-float);
+}
+
+.theme-glow {
+  box-shadow: var(--glow);
 }

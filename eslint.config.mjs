@@ -81,6 +81,30 @@ export default antfu(
     files: ['**/*.vue'],
     rules: {
       'vue/multi-word-component-names': 'off',
+      // uni-app 的 <text> 是行内元素，但 eslint-plugin-vue 的行内元素白名单里没有它。
+      // 这条规则默认会把 `<text class="x">同一个节奏</text>` 拆成三行，而拆出来的换行
+      // 会被 Vue 编译器压成一个真实空格 —— 渲染时高亮词左右各多半个字，CSS 去不掉。
+      // 保存时 source.fixAll.eslint 一跑就又改回去，所以这里把 text 一并放行
+      // （ignores 是整体替换，故把默认的行内元素白名单原样带上）。
+      'vue/singleline-html-element-content-newline': [
+        'error',
+        {
+          ignoreWhenNoAttributes: true,
+          ignoreWhenEmpty: true,
+          ignores: [
+            // 下面是 eslint-plugin-vue 默认的行内元素白名单（ignores 是整体替换，必须原样带上）
+            'pre',
+            'textarea',
+            'a', 'abbr', 'audio', 'b', 'bdi', 'bdo', 'br', 'button', 'canvas', 'cite', 'code', 'data',
+            'datalist', 'del', 'dfn', 'em', 'embed', 'i', 'iframe', 'img', 'input', 'ins', 'kbd', 'label',
+            'map', 'mark', 'meter', 'noscript', 'object', 'output', 'picture', 'progress', 'q', 'ruby', 's',
+            'samp', 'script', 'select', 'slot', 'small', 'span', 'strong', 'sub', 'sup', 'svg', 'template',
+            'time', 'u', 'var', 'video', 'wbr',
+            // uni-app 的行内文本标签
+            'text',
+          ],
+        },
+      ],
     },
   },
 );

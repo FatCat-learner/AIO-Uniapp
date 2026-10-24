@@ -25,6 +25,8 @@ export default defineConfig(({ command, mode }): UserConfig => {
       alias: {
         // 设置别名
         '@': fileURLToPath(new URL('./src', import.meta.url)),
+        // mock 数据 / 类型（mocks/ 目录，见 mocks/README.md）
+        '@mocks': fileURLToPath(new URL('./mocks', import.meta.url)),
       },
     },
     // vite 相关配置
@@ -45,7 +47,7 @@ export default defineConfig(({ command, mode }): UserConfig => {
         },
       },
     },
-    plugins: createVitePlugins(isBuild),
+    plugins: createVitePlugins(isBuild, env),
     esbuild: {
       drop: JSON.parse(env.VITE_DROP_CONSOLE) ? ['console', 'debugger'] : [],
     },
