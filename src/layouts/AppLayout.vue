@@ -1,97 +1,3 @@
-<script setup lang="ts">
-/**
- * AppLayout · 全站公共骨架（规范 §4.1 Shell）
- *
- * ┌─ 状态栏安全区（var(--status-bar-height)）
- * ├─ AppNavBar（56 高，滚动后 title 收成 17/600）
- * ├─ scroll-view 内容区（页边 16，底部预留 108 给悬浮 Dock）
- * ├─ float 插槽（悬浮层：WorkoutPill / 训练胶囊等）
- * ├─ AppTabBar（悬浮 Dock 282×60 + 独立训练按钮 60）
- * └─ overlay 插槽（Sheet / 弹层，压在最上层）
- *
- * 设计口径：390 画板、单位用 px（与设计稿 1:1，H5 桌面端被 max-width 430 收成手机框）。
- * 页边距 / 卡片 / 圆角一律走 theme.scss 的 token，禁止在此写死色值。
- */
-import { computed, ref } from 'vue';
-import AppNavBar from '@/components/layout/AppNavBar.vue';
-import AppTabBar from '@/components/layout/AppTabBar.vue';
-import type { TabKey } from './tabs';
-import { navigateToTab } from './tabs';
-
-const props = withDefaults(
-  defineProps<{
-    /** 导航标题（large 24/600，back 居中 17/600） */
-    title?: string;
-    /** 标题下一行 11 灰副信息（滚动后自动隐藏） */
-    subtitle?: string;
-    /** 导航形态：large 大标题 / back 返回型 / none 页面自绘 */
-    nav?: 'large' | 'back' | 'none';
-    /** 滚动时标题收起 */
-    compactOnScroll?: boolean;
-    /** 是否显示底部悬浮 Dock（训练中、二级页通常置 false） */
-    showTabBar?: boolean;
-    /** 当前高亮的 Tab */
-    activeTab?: TabKey;
-    /** 内容区额外的 class（用于页面级留白/背景调整） */
-    contentClass?: string;
-    /** 训练按钮是否处于展开态（图标转 × ） */
-    fabOpen?: boolean;
-    /** 训练进行中：按钮放大 + 上方浮出 WorkoutPill */
-    workoutActive?: boolean;
-    workoutTime?: string;
-  }>(),
-  {
-    title: '',
-    subtitle: '',
-    nav: 'large',
-    compactOnScroll: true,
-    showTabBar: true,
-    activeTab: 'home',
-    contentClass: '',
-    fabOpen: false,
-    workoutActive: false,
-    workoutTime: '00:00',
-  },
-);
-
-const emit = defineEmits<{
-  (e: 'tab-change', key: TabKey): void;
-  (e: 'fab'): void;
-  (e: 'resume-workout'): void;
-}>();
-
-/** 滚动阈值：超过 12px 认为「已滚动」，标题收起 + 出现分隔线 */
-const SCROLL_THRESHOLD = 12;
-const compact = ref(false);
-
-function handleScroll(event: any) {
-  if (!props.compactOnScroll) return;
-  const scrollTop = event?.detail?.scrollTop ?? 0;
-  const next = scrollTop > SCROLL_THRESHOLD;
-  if (next !== compact.value) compact.value = next;
-}
-
-function handleBack() {
-  const pages = getCurrentPages();
-  if (pages.length > 1) {
-    uni.navigateBack({ delta: 1 });
-    return;
-  }
-  uni.reLaunch({ url: '/pages/index/index' });
-}
-
-function handleTab(key: TabKey) {
-  emit('tab-change', key);
-  navigateToTab(key);
-}
-
-const contentStyle = computed(() => ({
-  paddingBottom: props.showTabBar ? 'var(--content-inset-bottom)' : '24px',
-}));
-
-const bodyClass = computed(() => ({ 'is-compact': compact.value }));
-</script>
-
 <template>
   <view class="app">
     <AppNavBar
@@ -140,13 +46,111 @@ const bodyClass = computed(() => ({ 'is-compact': compact.value }));
       :workout-time="workoutTime"
       @change="handleTab"
       @fab="emit('fab')"
-      @resume="emit('resume-workout')"
+      @resume="emit('resumeWorkout')"
     />
 
     <!-- 弹层：Sheet / ActionSheet 压在最上层 -->
     <slot name="overlay" />
+
+    <!-- Toast / Snackbar 宿主：全局只挂一次（组件见 components/overlays/README.md） -->
+    <AppToastHost />
   </view>
 </template>
+
+<script setup lang="ts">
+import type { TabKey } from './tabs';
+/**
+ * AppLayout · 全站公共骨架（规范 §4.1 Shell）
+ *
+ * ┌─ 状态栏安全区（var(--status-bar-height)）
+ * ├─ AppNavBar（56 高，滚动后 title 收成 17/600）
+ * ├─ scroll-view 内容区（页边 16，底部预留 108 给悬浮 Dock）
+ * ├─ float 插槽（悬浮层：WorkoutPill / 训练胶囊等）
+ * ├─ AppTabBar（悬浮 Dock 282×60 + 独立训练按钮 60）
+ * └─ overlay 插槽（Sheet / 弹层，压在最上层）
+ *
+ * 设计口径：390 画板、单位用 px（与设计稿 1:1，H5 桌面端被 max-width 430 收成手机框）。
+ * 页边距 / 卡片 / 圆角一律走 theme.scss 的 token，禁止在此写死色值。
+ */
+import { computed, ref } from 'vue';
+import AppNavBar from '@/components/layout/AppNavBar.vue';
+import AppTabBar from '@/components/layout/AppTabBar.vue';
+import AppToastHost from '@/components/overlays/AppToastHost.vue';
+import { navigateToTab } from './tabs';
+
+const props = withDefaults(
+  defineProps<{
+    /** 导航标题（large 24/600，back 居中 17/600） */
+    title?: string;
+    /** 标题下一行 11 灰副信息（滚动后自动隐藏） */
+    subtitle?: string;
+    /** 导航形态：large 大标题 / back 返回型 / none 页面自绘 */
+    nav?: 'large' | 'back' | 'none';
+    /** 滚动时标题收起 */
+    compactOnScroll?: boolean;
+    /** 是否显示底部悬浮 Dock（训练中、二级页通常置 false） */
+    showTabBar?: boolean;
+    /** 当前高亮的 Tab */
+    activeTab?: TabKey;
+    /** 内容区额外的 class（用于页面级留白/背景调整） */
+    contentClass?: string;
+    /** 训练按钮是否处于展开态（图标转 × ） */
+    fabOpen?: boolean;
+    /** 训练进行中：按钮放大 + 上方浮出 WorkoutPill */
+    workoutActive?: boolean;
+    workoutTime?: string;
+  }>(),
+  {
+    title: '',
+    subtitle: '',
+    nav: 'large',
+    compactOnScroll: true,
+    showTabBar: true,
+    activeTab: 'home',
+    contentClass: '',
+    fabOpen: false,
+    workoutActive: false,
+    workoutTime: '00:00',
+  },
+);
+
+const emit = defineEmits<{
+  (e: 'tabChange', key: TabKey): void;
+  (e: 'fab'): void;
+  (e: 'resumeWorkout'): void;
+}>();
+
+/** 滚动阈值：超过 12px 认为「已滚动」，标题收起 + 出现分隔线 */
+const SCROLL_THRESHOLD = 12;
+const compact = ref(false);
+
+function handleScroll(event: any) {
+  if (!props.compactOnScroll) return;
+  const scrollTop = event?.detail?.scrollTop ?? 0;
+  const next = scrollTop > SCROLL_THRESHOLD;
+  if (next !== compact.value) compact.value = next;
+}
+
+function handleBack() {
+  const pages = getCurrentPages();
+  if (pages.length > 1) {
+    uni.navigateBack({ delta: 1 });
+    return;
+  }
+  uni.reLaunch({ url: '/pages/index/index' });
+}
+
+function handleTab(key: TabKey) {
+  emit('tabChange', key);
+  navigateToTab(key);
+}
+
+const contentStyle = computed(() => ({
+  paddingBottom: props.showTabBar ? 'var(--content-inset-bottom)' : '24px',
+}));
+
+const bodyClass = computed(() => ({ 'is-compact': compact.value }));
+</script>
 
 <style lang="scss" scoped>
 .app {
@@ -162,7 +166,7 @@ const bodyClass = computed(() => ({ 'is-compact': compact.value }));
 }
 
 /* 桌面端浏览器里收成「手机框」，避免 390 稿被拉宽 */
-@media (min-width: 480px) {
+@media (width >= 480px) {
   .app {
     box-shadow: 0 0 0 1px var(--line);
   }
@@ -170,7 +174,7 @@ const bodyClass = computed(() => ({ 'is-compact': compact.value }));
 
 .app__status {
   flex: none;
-  height: var(--status-bar-height, 0px);
+  height: var(--status-bar-height, 0);
 }
 
 .app__body {

@@ -8,9 +8,9 @@
 /**
  * 页面底部文字链接：所有视图统一贴底、居中、13px（§16.13）
  */
-withDefaults(defineProps<{ prefix?: string; link?: string }>(), { prefix: '', link: '' })
+withDefaults(defineProps<{ prefix?: string; link?: string }>(), { prefix: '', link: '' });
 
-const emit = defineEmits<{ tap: [] }>()
+const emit = defineEmits<{ tap: [] }>();
 </script>
 
 <style lang="scss" scoped>

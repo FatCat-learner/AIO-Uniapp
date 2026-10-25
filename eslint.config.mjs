@@ -12,7 +12,7 @@ export default antfu(
       'src/uni_modules/**',
       'src/manifest.json',
       'src/pages.json',
-      'README.md',
+      '**/README.md',
     ],
   },
   {

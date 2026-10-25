@@ -174,9 +174,9 @@ function onChange(e: any) {
 
 .pg1__top {
   display: flex;
+  gap: var(--sp-3);
   align-items: flex-end;
   justify-content: space-between;
-  gap: var(--sp-3);
 }
 
 .pg1__l {
@@ -194,8 +194,8 @@ function onChange(e: any) {
 
 .pg1__vrow {
   display: flex;
-  align-items: baseline;
   gap: var(--sp-1);
+  align-items: baseline;
 }
 
 .pg1__v {
@@ -220,9 +220,9 @@ function onChange(e: any) {
 .tile {
   display: flex;
   flex-direction: column;
+  gap: 2px;
   align-items: center;
   justify-content: center;
-  gap: 2px;
   width: 64px;
   height: 56px;
   border-radius: var(--radius-md);
@@ -272,9 +272,9 @@ function onChange(e: any) {
 /* ---------- 页 2 ---------- */
 .pg2 {
   display: flex;
+  gap: var(--sp-2);
   align-items: center;
   justify-content: space-between;
-  gap: var(--sp-2);
   padding: 0 var(--sp-5);
 }
 
@@ -308,8 +308,8 @@ function onChange(e: any) {
 
 .macro__vrow {
   display: flex;
-  align-items: baseline;
   gap: 2px;
+  align-items: baseline;
 }
 
 .macro__v {
@@ -325,16 +325,16 @@ function onChange(e: any) {
 
 /* ---------- 页 3 ---------- */
 .lock {
-  margin: 0 var(--sp-5);
   padding: 1px;
+  margin: 0 var(--sp-5);
   background-image: var(--gradient-ai);
   border-radius: var(--radius-md);
 }
 
 .lock__in {
   display: flex;
-  align-items: center;
   gap: var(--sp-3);
+  align-items: center;
   height: 88px;
   padding: 0 var(--sp-4);
   background-color: var(--surface);
@@ -376,9 +376,9 @@ function onChange(e: any) {
 /* ---------- 圆点 ---------- */
 .diet__dots {
   display: flex;
+  gap: 5px;
   align-items: center;
   justify-content: center;
-  gap: 5px;
   padding: var(--sp-2) 0 var(--sp-3);
 }
 
@@ -406,8 +406,8 @@ function onChange(e: any) {
 .quick {
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: var(--sp-1);
+  align-items: center;
   width: 44px;
 }
 
@@ -453,9 +453,9 @@ function onChange(e: any) {
 /* ---------- 拍照识别 ---------- */
 .diet__cta {
   display: flex;
+  gap: var(--sp-1);
   align-items: center;
   justify-content: center;
-  gap: var(--sp-1);
   height: 48px;
   margin: var(--sp-4) var(--sp-4) var(--sp-4);
   font-size: 14px;

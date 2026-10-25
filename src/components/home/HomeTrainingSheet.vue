@@ -64,10 +64,7 @@ const actions = [
 <style lang="scss" scoped>
 .mask {
   position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  inset: 0;
   z-index: 110;
   background-color: var(--mask);
 }
@@ -126,8 +123,8 @@ const actions = [
   display: flex;
   flex: 1;
   flex-direction: column;
-  align-items: center;
   gap: 6px;
+  align-items: center;
   padding: 12px 0;
   background-color: var(--surface);
   border: 1px solid var(--line);

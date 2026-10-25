@@ -80,9 +80,9 @@
  * 快捷登录品牌图标（内联 SVG，不引图标库）
  * 每个图标都是矢量，颜色写死品牌色，不跟随 currentColor——品牌 logo 不该被主题改色。
  */
-import type { OAuthProvider } from './constants'
+import type { OAuthProvider } from './constants';
 
-withDefaults(defineProps<{ provider: OAuthProvider; size?: number }>(), { size: 22 })
+withDefaults(defineProps<{ provider: OAuthProvider; size?: number }>(), { size: 22 });
 </script>
 
 <style lang="scss" scoped>

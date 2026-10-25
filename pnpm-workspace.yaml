@@ -19,3 +19,7 @@ allowBuilds:
   less: false
   protobufjs: false
   simple-git-hooks: true
+
+# 从 package.json 的 pnpm.overrides 迁移而来（pnpm 12 不再读 package.json 里的 pnpm 字段）
+overrides:
+  vue: 3.4.21

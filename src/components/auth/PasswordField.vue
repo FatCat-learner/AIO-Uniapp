@@ -11,7 +11,7 @@
         :placeholder="placeholder"
         placeholder-class="pwd__ph"
         @input="onInput"
-      />
+      >
       <view class="pwd__eye" @tap="visible = !visible">
         <AppIcon :name="visible ? 'eye-off-outline' : 'eye-outline'" :size="18" class="pwd__eye-icon" />
       </view>
@@ -43,30 +43,30 @@
  * 密码输入模块 PasswordField（§16.12）
  * 注册② 与 忘记密码② 共用：密码框 → 4 段强度条 → 强度文案 → 规则清单
  */
-import { ref } from 'vue'
-import AppIcon from '@/components/base/AppIcon.vue'
-import { usePasswordRules } from '@/composables/usePasswordRules'
-import { PASSWORD_HINT } from './constants'
+import { ref } from 'vue';
+import AppIcon from '@/components/base/AppIcon.vue';
+import { usePasswordRules } from '@/composables/usePasswordRules';
+import { PASSWORD_HINT } from './constants';
 
 const props = withDefaults(
   defineProps<{
-    modelValue: string
-    label?: string
-    placeholder?: string
-    strength?: boolean
-    rules?: boolean
-    invalid?: string
+    modelValue: string;
+    label?: string;
+    placeholder?: string;
+    strength?: boolean;
+    rules?: boolean;
+    invalid?: string;
   }>(),
   { label: '密码', placeholder: '请输入密码', strength: false, rules: false, invalid: '' },
-)
+);
 
-const emit = defineEmits<{ 'update:modelValue': [value: string] }>()
+const emit = defineEmits<{ 'update:modelValue': [value: string] }>();
 
-const visible = ref(false)
-const { rules: ruleList, level, text } = usePasswordRules(() => props.modelValue)
+const visible = ref(false);
+const { rules: ruleList, level, text } = usePasswordRules(() => props.modelValue);
 
 function onInput(event: any) {
-  emit('update:modelValue', event.detail.value)
+  emit('update:modelValue', event.detail.value);
 }
 </script>
 
@@ -163,8 +163,8 @@ function onInput(event: any) {
 
 .pwd__rule {
   display: flex;
-  align-items: center;
   gap: 4px;
+  align-items: center;
   width: 50%;
   padding: 2px 0;
 }

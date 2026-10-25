@@ -51,7 +51,9 @@
     "clean": "npx rimraf node_modules",
     "clean:cache": "npx rimraf node_modules/.cache",
     "test": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "gen:page": "node scripts/gen-page.mjs",
+    "lint": "eslint \"src/**/*.{js,jsx,ts,tsx,vue}\" && stylelint \"src/**/*.{vue,scss,css,sass,less}\""
   },
   "dependencies": {
     "@dcloudio/uni-app": "3.0.0-5020420260813003",
@@ -116,6 +118,7 @@
     "eslint": "^10.12.0",
     "jsdom": "^30.1.2",
     "lint-staged": "^17.6.0",
+    "lodash-es": "^4.18.1",
     "miniprogram-api-typings": "^5.2.1",
     "miniprogram-ci": "^2.1.31",
     "nostics": "^1.3.0",
@@ -134,17 +137,12 @@
     "unplugin-vue-components": "^32.1.0",
     "vite": "5.2.8",
     "vite-plugin-clean-build": "^1.4.1",
-    "vite-plugin-replace-image-url": "^1.4.1",
     "vite-plugin-mock": "^3.0.2",
+    "vite-plugin-replace-image-url": "^1.4.1",
     "vite-plugin-restart": "^2.0.0",
     "vite-plugin-vue-mcp": "^0.3.2",
     "vitest": "^2.1.9",
     "vue-tsc": "^2.2.12"
-  },
-  "pnpm": {
-    "overrides": {
-      "vue": "3.4.21"
-    }
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm test --run --passWithNoTests && pnpm lint-staged && pnpm typecheck",

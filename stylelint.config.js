@@ -25,6 +25,11 @@ export default {
     'comment-empty-line-before': null,
     'color-hex-length': null,
     'import-notation': 'string',
+    // 项目用 BEM（.block__element--modifier），标准规则的 kebab-only 会全量报错
+    'selector-class-pattern': [
+      '^[a-z][a-z0-9]*(-[a-z0-9]+)*(__[a-z0-9-]+)?(--[a-z0-9-]+)?$',
+      { resolveNestedSelectors: true, message: '类名用 kebab-case 或 BEM（block__element--modifier）' },
+    ],
 
     // --- UniApp & 小程序适配 ---
     // 允许 rpx 单位

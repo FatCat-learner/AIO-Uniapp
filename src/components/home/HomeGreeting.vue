@@ -50,8 +50,8 @@ const emit = defineEmits<{
 <style lang="scss" scoped>
 .greet {
   display: flex;
-  align-items: flex-start;
   gap: var(--sp-2);
+  align-items: flex-start;
   padding-bottom: var(--sp-1);
 }
 
@@ -65,8 +65,8 @@ const emit = defineEmits<{
 
 .greet__row {
   display: flex;
-  align-items: center;
   gap: var(--sp-2);
+  align-items: center;
   min-width: 0;
 }
 
@@ -74,21 +74,21 @@ const emit = defineEmits<{
   flex: none;
   max-width: 100%;
   overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 24px;
   font-weight: 600;
   line-height: 32px;
   color: var(--text-1);
   letter-spacing: -0.01em;
-  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .greet__sub {
   overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 11px;
   line-height: 16px;
   color: var(--text-2);
-  text-overflow: ellipsis;
   white-space: nowrap;
 }
 

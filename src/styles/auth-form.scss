@@ -1,0 +1,6 @@
+// auth 表单体：登录 / 验证码登录 / 注册 / 忘记密码 四页共用，各页 <style scoped> 自行 @import
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}

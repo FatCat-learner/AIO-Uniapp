@@ -41,6 +41,6 @@ const props = withDefaults(
 <style lang="scss" scoped>
 .app-icon {
   flex: none;
-  background-color: currentColor;
+  background-color: currentcolor;
 }
 </style>

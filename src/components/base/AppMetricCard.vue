@@ -89,9 +89,9 @@ const emit = defineEmits<{
 <style lang="scss" scoped>
 .m-head {
   display: flex;
+  gap: var(--sp-2);
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--sp-2);
 }
 
 .m-head__l {
@@ -111,8 +111,8 @@ const emit = defineEmits<{
 .m-head__r {
   display: flex;
   flex: none;
-  align-items: center;
   gap: var(--sp-2);
+  align-items: center;
 }
 
 /* 32 圆「+」：brand-50 底、荧光绿加号 */
@@ -129,17 +129,17 @@ const emit = defineEmits<{
 
 .m-body {
   display: flex;
+  gap: var(--sp-2);
   align-items: flex-end;
   justify-content: space-between;
-  gap: var(--sp-2);
   margin-top: var(--sp-5);
 }
 
 .m-value {
   display: flex;
   flex-wrap: nowrap;
-  align-items: baseline;
   gap: var(--sp-1);
+  align-items: baseline;
   min-width: 0;
 }
 

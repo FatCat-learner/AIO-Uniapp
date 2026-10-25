@@ -4,6 +4,7 @@ page {
   background-color: var(--bg);
   -webkit-font-smoothing: antialiased;
 }
+
 .page {
   position: relative;
   display: flex;
@@ -11,8 +12,8 @@ page {
   width: 100%;
   max-width: 440px;
   height: 100vh;
-  overflow: hidden;
   margin: 0 auto;
+  overflow: hidden;
   background-color: var(--bg);
 }
 
@@ -49,9 +50,9 @@ page {
 /* 卡片头：左 15/600 标题，右 11 灰说明或 tint 胶囊，两端对齐 */
 .a-card-hd {
   display: flex;
+  gap: var(--sp-2);
   align-items: center;
   justify-content: space-between;
-  gap: var(--sp-2);
 }
 
 .a-card-title {
@@ -64,8 +65,8 @@ page {
 /* 卡头右侧说明文字（「共 2 次 · 1,860 千卡」「2026/10/20 更新」） */
 .a-card-meta {
   display: inline-flex;
-  align-items: center;
   gap: 2px;
+  align-items: center;
   font-size: 11px;
   line-height: 14px;
   color: var(--text-3);
@@ -82,8 +83,8 @@ page {
 .a-pill {
   display: inline-flex;
   flex: none;
-  align-items: center;
   gap: var(--sp-1);
+  align-items: center;
   height: var(--pill-h);
   padding: 0 10px;
   font-size: 11px;
@@ -132,8 +133,8 @@ page {
 
 /* 等宽数字：数值变化（倒计时、容量）时不抖动 */
 .a-num {
-  font-variant-numeric: tabular-nums;
   font-feature-settings: 'tnum';
+  font-variant-numeric: tabular-nums;
 }
 
 /* 虚线槽：预约卡 / 空态 / 「+ 添加卡片」 */
@@ -146,8 +147,8 @@ page {
 .a-link {
   display: inline-flex;
   flex: none;
-  align-items: center;
   gap: 2px;
+  align-items: center;
   font-size: 13px;
   font-weight: 600;
   line-height: 18px;

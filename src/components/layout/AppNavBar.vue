@@ -1,3 +1,30 @@
+<template>
+  <view class="nav" :class="rootClass">
+    <!-- 状态栏安全区：H5 为 0，App/小程序自动取系统高度 -->
+    <view class="nav__status" />
+
+    <view class="nav__bar">
+      <template v-if="variant === 'back'">
+        <view class="nav__back" hover-class="u-hover" :hover-stay-time="80" @tap="handleBack">
+          <AppIcon name="arrow-left" :size="24" />
+        </view>
+        <text class="nav__center-title">{{ title }}</text>
+      </template>
+
+      <view v-else class="nav__titles">
+        <slot name="left">
+          <text class="nav__title">{{ title }}</text>
+          <text v-if="subtitle && !compact" class="nav__subtitle">{{ subtitle }}</text>
+        </slot>
+      </view>
+
+      <view class="nav__actions">
+        <slot name="right" />
+      </view>
+    </view>
+  </view>
+</template>
+
 <script setup lang="ts">
 /**
  * AppNavBar · 顶部导航（规范 §4.2）
@@ -43,33 +70,6 @@ function handleBack() {
 }
 </script>
 
-<template>
-  <view class="nav" :class="rootClass">
-    <!-- 状态栏安全区：H5 为 0，App/小程序自动取系统高度 -->
-    <view class="nav__status" />
-
-    <view class="nav__bar">
-      <template v-if="variant === 'back'">
-        <view class="nav__back" hover-class="u-hover" :hover-stay-time="80" @tap="handleBack">
-          <AppIcon name="arrow-left" :size="24" />
-        </view>
-        <text class="nav__center-title">{{ title }}</text>
-      </template>
-
-      <view v-else class="nav__titles">
-        <slot name="left">
-          <text class="nav__title">{{ title }}</text>
-          <text v-if="subtitle && !compact" class="nav__subtitle">{{ subtitle }}</text>
-        </slot>
-      </view>
-
-      <view class="nav__actions">
-        <slot name="right" />
-      </view>
-    </view>
-  </view>
-</template>
-
 <style lang="scss" scoped>
 .nav {
   z-index: 50;
@@ -78,7 +78,7 @@ function handleBack() {
 }
 
 .nav__status {
-  height: var(--status-bar-height, 0px);
+  height: var(--status-bar-height, 0);
 }
 
 .nav__bar {
@@ -100,11 +100,11 @@ function handleBack() {
 
 .nav__title {
   overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 24px;
   font-weight: 600;
   line-height: 30px;
   color: var(--text-1);
-  text-overflow: ellipsis;
   white-space: nowrap;
   transition: font-size 0.18s ease;
 }
@@ -144,12 +144,12 @@ function handleBack() {
   left: 50%;
   max-width: 200px;
   overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 17px;
   font-weight: 600;
   line-height: 24px;
   color: var(--text-1);
   text-align: center;
-  text-overflow: ellipsis;
   white-space: nowrap;
   transform: translateX(-50%);
 }

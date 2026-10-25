@@ -1,3 +1,12 @@
+<template>
+  <view class="icon-btn-wrap">
+    <view class="icon-btn" :class="rootClass" hover-class="u-hover" :hover-stay-time="80" @tap="emit('click', $event)">
+      <AppIcon :name="icon" :size="size" />
+    </view>
+    <view v-if="dot" class="icon-btn__dot" />
+  </view>
+</template>
+
 <script setup lang="ts">
 /**
  * AppIconButton · 40×40 圆形图标按钮（规范 §4.8 IconButton）
@@ -31,15 +40,6 @@ const emit = defineEmits<{
 const rootClass = computed(() => [`icon-btn--${props.variant}`]);
 </script>
 
-<template>
-  <view class="icon-btn-wrap">
-    <view class="icon-btn" :class="rootClass" hover-class="u-hover" :hover-stay-time="80" @tap="emit('click', $event)">
-      <AppIcon :name="icon" :size="size" />
-    </view>
-    <view v-if="dot" class="icon-btn__dot" />
-  </view>
-</template>
-
 <style lang="scss" scoped>
 .icon-btn-wrap {
   position: relative;
@@ -52,8 +52,8 @@ const rootClass = computed(() => [`icon-btn--${props.variant}`]);
   justify-content: center;
   width: 40px;
   height: 40px;
-  border-radius: var(--radius-full);
   color: var(--text-1);
+  border-radius: var(--radius-full);
 }
 
 .icon-btn--default {

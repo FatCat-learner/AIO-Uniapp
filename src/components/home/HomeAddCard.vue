@@ -25,9 +25,9 @@ const emit = defineEmits<{
 <style lang="scss" scoped>
 .add {
   display: flex;
+  gap: var(--sp-1);
   align-items: center;
   justify-content: center;
-  gap: var(--sp-1);
   height: 56px;
   color: var(--text-3);
 }

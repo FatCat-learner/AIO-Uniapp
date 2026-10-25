@@ -1,5 +1,5 @@
 <template>
-  <view v-if="visible" class="country">
+  <view v-if="visible" class="country" :style="{ zIndex: overlayZ('sheet') }">
     <view class="country__mask" @tap="emit('close')" />
     <view class="country__panel">
       <view class="country__head">
@@ -25,39 +25,34 @@
 </template>
 
 <script setup lang="ts">
+import type { ICountry } from './constants';
+import { overlayZ } from '@/components/overlays/overlayStack';
 /**
  * 国际区号面板：底部升起，一行一个地区（左侧名称、右侧区号）
  */
-import { COUNTRIES, type ICountry } from './constants'
+import { COUNTRIES } from './constants';
 
-withDefaults(defineProps<{ visible: boolean; activeDial?: string }>(), { activeDial: '+86' })
+withDefaults(defineProps<{ visible: boolean; activeDial?: string }>(), { activeDial: '+86' });
 
-const emit = defineEmits<{ close: []; select: [country: ICountry] }>()
+const emit = defineEmits<{ close: []; select: [country: ICountry] }>();
 
-const countries = COUNTRIES
+const countries = COUNTRIES;
 
 function onPick(item: ICountry) {
-  emit('select', item)
+  emit('select', item);
 }
 </script>
 
 <style lang="scss" scoped>
 .country {
   position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 900;
+  inset: 0;
 }
 
 .country__mask {
   position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background: rgba(0, 0, 0, 0.55);
+  inset: 0;
+  background: rgb(0 0 0 / 55%);
 }
 
 .country__panel {
@@ -121,7 +116,7 @@ function onPick(item: ICountry) {
 
 .is-active .country__name,
 .is-active .country__dial {
-  color: var(--brand-500);
   font-weight: 600;
+  color: var(--brand-500);
 }
 </style>

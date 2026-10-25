@@ -50,15 +50,15 @@ const emit = defineEmits<{
   display: flex;
   flex: 1;
   flex-direction: column;
-  align-items: center;
   gap: var(--sp-1);
+  align-items: center;
   min-width: 0;
 }
 
 .pin__vrow {
   display: flex;
-  align-items: baseline;
   gap: 2px;
+  align-items: baseline;
   margin-top: var(--sp-1);
 }
 

@@ -108,7 +108,7 @@ const lastDot = computed(() => coords.value[coords.value.length - 1]);
 .spark__seg {
   position: absolute;
   height: 2px;
-  background-color: currentColor;
+  background-color: currentcolor;
   border-radius: 1px;
   transform-origin: left center;
 }
@@ -117,7 +117,7 @@ const lastDot = computed(() => coords.value[coords.value.length - 1]);
   position: absolute;
   width: 5px;
   height: 5px;
-  background-color: currentColor;
+  background-color: currentcolor;
   border-radius: var(--radius-full);
   opacity: 0.55;
 }
@@ -126,7 +126,7 @@ const lastDot = computed(() => coords.value[coords.value.length - 1]);
   position: absolute;
   width: 7px;
   height: 7px;
-  background-color: currentColor;
+  background-color: currentcolor;
   border-radius: var(--radius-full);
   box-shadow: 0 0 0 3px var(--surface);
 }

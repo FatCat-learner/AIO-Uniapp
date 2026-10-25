@@ -11,7 +11,7 @@
         placeholder="6 位数字"
         placeholder-class="code__ph"
         @input="onInput"
-      />
+      >
       <view
         class="code__send"
         :class="{ 'is-disabled': running || loading }"
@@ -30,35 +30,35 @@
  * 四个入口共用：验证码登录 / 注册① / 忘记密码① /（小程序短信回落）
  * 发送前由父级先弹图形码，验证通过后再调 start() 进入 60 秒冷却。
  */
-import AppIcon from '@/components/base/AppIcon.vue'
-import { useCountdown } from '@/composables/useCountdown'
-import { CODE_TIP } from './constants'
+import AppIcon from '@/components/base/AppIcon.vue';
+import { useCountdown } from '@/composables/useCountdown';
+import { CODE_TIP } from './constants';
 
 withDefaults(
   defineProps<{
-    modelValue: string
-    label?: string
-    length?: number
-    tip?: boolean
-    loading?: boolean
+    modelValue: string;
+    label?: string;
+    length?: number;
+    tip?: boolean;
+    loading?: boolean;
   }>(),
   { label: '验证码', length: 6, tip: true, loading: false },
-)
+);
 
-const emit = defineEmits<{ 'update:modelValue': [value: string]; send: [] }>()
+const emit = defineEmits<{ 'update:modelValue': [value: string]; 'send': [] }>();
 
-const { left, running, start } = useCountdown()
+const { left, running, start } = useCountdown();
 
 function onInput(event: any) {
-  emit('update:modelValue', event.detail.value)
+  emit('update:modelValue', event.detail.value);
 }
 
 function onSend() {
-  if (running.value) return
-  emit('send')
+  if (running.value) return;
+  emit('send');
 }
 
-defineExpose({ start, stop: () => undefined, running })
+defineExpose({ start, stop: () => undefined, running });
 </script>
 
 <style lang="scss" scoped>
@@ -104,7 +104,7 @@ defineExpose({ start, stop: () => undefined, running })
   justify-content: center;
   height: 32px;
   padding: 0 12px;
-  background: rgba(var(--brand-500-rgb), 0.09);
+  background: rgb(var(--brand-500-rgb), 0.09);
   border-radius: var(--radius-xs);
 
   &.is-disabled {

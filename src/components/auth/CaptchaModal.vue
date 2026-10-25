@@ -1,5 +1,5 @@
 <template>
-  <view v-if="visible" class="cap">
+  <view v-if="visible" class="cap" :style="{ zIndex: overlayZ('dialog') }">
     <view class="cap__mask" @tap="emit('close')" />
     <view class="cap__panel">
       <view class="cap__head">
@@ -15,7 +15,9 @@
             :key="index"
             class="cap__char"
             :class="`cap__char--${index}`"
-          >{{ char }}</text>
+          >
+            {{ char }}
+          </text>
         </view>
         <view class="cap__input-box">
           <input
@@ -25,7 +27,7 @@
             placeholder="4 位字符"
             placeholder-class="cap__ph"
             @input="onInput"
-          />
+          >
         </view>
       </view>
 
@@ -41,73 +43,67 @@
  * 图形码弹窗：任何「获取验证码」都先过这一道（自研字符图形码，§16.6）
  * 输错自动换一张，不弹 toast，错误就地显示。
  */
-import { ref, watch } from 'vue'
-import AuthButton from './AuthButton.vue'
+import { ref, watch } from 'vue';
+import { overlayZ } from '@/components/overlays/overlayStack';
+import AuthButton from './AuthButton.vue';
 
-const props = withDefaults(defineProps<{ visible: boolean; loading?: boolean }>(), { loading: false })
+const props = withDefaults(defineProps<{ visible: boolean; loading?: boolean }>(), { loading: false });
 
-const emit = defineEmits<{ close: []; success: [] }>()
+const emit = defineEmits<{ close: []; success: [] }>();
 
-const POOL = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ'
-const chars = ref<string[]>([])
-const input = ref('')
-const error = ref('')
+const POOL = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
+const chars = ref<string[]>([]);
+const input = ref('');
+const error = ref('');
 
 function refresh() {
-  const next: string[] = []
+  const next: string[] = [];
   while (next.length < 4) {
-    const char = POOL[Math.floor(Math.random() * POOL.length)]
-    next.push(char)
+    const char = POOL[Math.floor(Math.random() * POOL.length)];
+    next.push(char);
   }
-  chars.value = next
-  input.value = ''
-  error.value = ''
+  chars.value = next;
+  input.value = '';
+  error.value = '';
 }
 
 watch(
   () => props.visible,
-  value => {
-    if (value) refresh()
+  (value) => {
+    if (value) refresh();
   },
   { immediate: true },
-)
+);
 
 function onInput(event: any) {
-  input.value = String(event.detail.value || '').toUpperCase()
-  error.value = ''
+  input.value = String(event.detail.value || '').toUpperCase();
+  error.value = '';
 }
 
 function submit() {
   if (input.value.length !== 4) {
-    error.value = '请输入 4 位字符'
-    return
+    error.value = '请输入 4 位字符';
+    return;
   }
   if (input.value !== chars.value.join('')) {
-    error.value = '字符不对，已换一张，请重新输入'
-    refresh()
-    return
+    error.value = '字符不对，已换一张，请重新输入';
+    refresh();
+    return;
   }
-  emit('success')
+  emit('success');
 }
 </script>
 
 <style lang="scss" scoped>
 .cap {
   position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 950;
+  inset: 0;
 }
 
 .cap__mask {
   position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background: rgba(0, 0, 0, 0.6);
+  inset: 0;
+  background: rgb(0 0 0 / 60%);
 }
 
 .cap__panel {
@@ -147,8 +143,8 @@ function submit() {
 
 .cap__row {
   display: flex;
-  align-items: center;
   gap: 12px;
+  align-items: center;
   margin: 14px 0 6px;
 }
 

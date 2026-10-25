@@ -69,11 +69,11 @@ function handleClick(event: Event) {
 
 .card--danger {
   background-color: var(--danger-soft);
-  border-color: rgba(239, 68, 68, 0.18);
+  border-color: rgb(239 68 68 / 18%);
 }
 
 .card--dashed {
-  border-style: dashed;
   border-color: var(--line-dashed);
+  border-style: dashed;
 }
 </style>

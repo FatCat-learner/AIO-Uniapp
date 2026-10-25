@@ -45,6 +45,20 @@ export default defineConfig({
    * 对应规范 §3.5：底部 5 Tab + 训练按钮 + 常用操作图标。
    */
   safelist: [
+    // 浮层统一组件（src/components/overlays）
+    'i-mdi-close',
+    'i-mdi-check',
+    'i-mdi-check-circle-outline',
+    'i-mdi-alert-circle-outline',
+    'i-mdi-alert-outline',
+    'i-mdi-information-outline',
+    'i-mdi-loading',
+    'i-mdi-trash-can-outline',
+    'i-mdi-pencil-outline',
+    'i-mdi-content-copy',
+    'i-mdi-share-variant',
+    'i-mdi-dots-horizontal',
+    'i-mdi-image-outline',
     // 账号与安全（登录 / 注册 / 忘记密码）
     'i-mdi-menu-down',
     'i-mdi-email-outline',

@@ -1,6 +1,7 @@
 <template>
   <view class="auth">
     <AuthGlow />
+    <AppToastHost />
 
     <view class="auth__hero">
       <view class="auth__bar">
@@ -48,6 +49,7 @@
  * 五个页面（登录 / 验证码登录 / 注册两步 / 忘记密码两步）全部复用它，只换内容。
  */
 import AppIcon from '@/components/base/AppIcon.vue';
+import AppToastHost from '@/components/overlays/AppToastHost.vue';
 import AuthGlow from './AuthGlow.vue';
 
 defineProps<{
@@ -63,8 +65,8 @@ const emit = defineEmits<{ back: [] }>();
 <style lang="scss" scoped>
 .auth {
   position: relative;
-  display: flex;
   box-sizing: border-box;
+  display: flex;
   flex-direction: column;
   width: 100%;
   height: 100vh;
@@ -75,11 +77,11 @@ const emit = defineEmits<{ back: [] }>();
 .auth__hero {
   position: relative;
   box-sizing: border-box;
-  min-height: 286px;
-  padding: 10px var(--sp-6) 18px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  min-height: 286px;
+  padding: 10px var(--sp-6) 18px;
 
 }
 
@@ -92,8 +94,8 @@ const emit = defineEmits<{ back: [] }>();
 
 .auth__back {
   display: flex;
-  align-items: center;
   gap: 2px;
+  align-items: center;
   color: var(--text-1);
 }
 
@@ -114,8 +116,8 @@ const emit = defineEmits<{ back: [] }>();
 .auth__wordmark {
   font-size: var(--fs-2xs);
   font-weight: 700;
-  letter-spacing: 2px;
   color: var(--text-3);
+  letter-spacing: 2px;
 }
 
 .auth__titles {
@@ -144,8 +146,8 @@ const emit = defineEmits<{ back: [] }>();
 
 .auth__sheet {
   position: relative;
-  box-sizing: border-box;
   z-index: 1;
+  box-sizing: border-box;
   display: flex;
   flex: 1;
   flex-direction: column;
@@ -155,16 +157,17 @@ const emit = defineEmits<{ back: [] }>();
   // background: var(--surface);
   background: linear-gradient(180deg,#1a1f2a 0,#14171f 140px);
   border-radius: var(--radius-xxl) var(--radius-xxl) 0 0;
-  box-shadow: 0 -24px 48px rgba(0, 0, 0, .55), inset 0 1px 0 rgba(255, 255, 255, .06);
-  &:before {
-     content: "";
+  box-shadow: 0 -24px 48px rgb(0 0 0 / 55%), inset 0 1px 0 rgb(255 255 255 / 6%);
+
+  &::before {
     position: absolute;
-    left: 50%;
     top: 0;
-    transform: translateX(-50%);
+    left: 50%;
     width: 150px;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(201, 240, 58, .55), transparent);
+     content: "";
+    background: linear-gradient(90deg, transparent, rgb(201 240 58 / 55%), transparent);
+    transform: translateX(-50%);
   }
 }
 
@@ -174,7 +177,7 @@ const emit = defineEmits<{ back: [] }>();
   left: 0;
   width: 100%;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(var(--brand-500-rgb), 0.45), transparent);
+  background: linear-gradient(90deg, transparent, rgb(var(--brand-500-rgb), 0.45), transparent);
 }
 
 .auth__scroll {

@@ -53,8 +53,8 @@ const emit = defineEmits<{
 .hd__right {
   display: flex;
   flex: none;
-  align-items: center;
   gap: var(--sp-1);
+  align-items: center;
   min-height: 20px;
 }
 

@@ -103,12 +103,12 @@ const handleResume = (): void => {
   bottom: 0;
   left: 50%;
   z-index: 100;
+  box-sizing: border-box;
   width: 100%;
   max-width: 430px;
-  padding: 0 16px calc(12px + env(safe-area-inset-bottom)) 16px;
+  padding: 0 16px calc(12px + env(safe-area-inset-bottom));
   pointer-events: none;
   transform: translateX(-50%);
-  box-sizing: border-box;
 }
 
 .tabbar__row {
@@ -120,25 +120,24 @@ const handleResume = (): void => {
 
 /* ============ Dock ============ */
 .tabbar__dock {
+  box-sizing: border-box;
   display: flex;
   flex: 1;
   align-items: center;
-  height: 60px;
   max-width: 282px;
+  height: 60px;
   padding-right: 2px;
   pointer-events: auto;
   background-color: var(--dock-bg);
   border: 1px solid var(--line);
   border-radius: var(--radius-full);
   backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  box-sizing: border-box;
 }
 
 /* Android 低版本 WebView 不支持 backdrop-filter：退化为近实色 */
 @supports not (backdrop-filter: blur(20px)) {
   .tabbar__dock {
-    background-color: rgba(11, 13, 18, 0.96);
+    background-color: rgb(11 13 18 / 96%);
   }
 }
 
@@ -189,8 +188,8 @@ const handleResume = (): void => {
   justify-content: center;
   width: 60px;
   height: 60px;
-  pointer-events: auto;
   color: var(--on-brand);
+  pointer-events: auto;
   background-color: var(--brand-500);
   border-radius: var(--radius-full);
   box-shadow: var(--glow);

@@ -17,13 +17,13 @@
   width: 560px;
   height: 560px;
   margin-left: -280px;
-  border-radius: 50%;
+  pointer-events: none;
   background: radial-gradient(
     circle at 50% 50%,
-    rgba(var(--brand-500-rgb), 0.22) 0%,
-    rgba(var(--brand-500-rgb), 0.08) 42%,
-    rgba(var(--brand-500-rgb), 0) 72%
+    rgb(var(--brand-500-rgb), 0.22) 0%,
+    rgb(var(--brand-500-rgb), 0.08) 42%,
+    rgb(var(--brand-500-rgb), 0) 72%
   );
-  pointer-events: none;
+  border-radius: 50%;
 }
 </style>

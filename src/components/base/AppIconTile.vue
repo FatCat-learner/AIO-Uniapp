@@ -1,3 +1,9 @@
+<template>
+  <view class="icon-tile" :class="`icon-tile--${tone}`" :style="tileStyle">
+    <AppIcon :name="icon" :size="iconSize" />
+  </view>
+</template>
+
 <script setup lang="ts">
 /**
  * AppIconTile · 图标块（规范 §4.5，PDF 签名组件）
@@ -31,12 +37,6 @@ const tileStyle = computed(() => ({
 }));
 </script>
 
-<template>
-  <view class="icon-tile" :class="`icon-tile--${tone}`" :style="tileStyle">
-    <AppIcon :name="icon" :size="iconSize" />
-  </view>
-</template>
-
 <style lang="scss" scoped>
 .icon-tile {
   display: flex;
@@ -48,26 +48,26 @@ const tileStyle = computed(() => ({
 
 .icon-tile--train {
   color: var(--mod-train);
-  background-color: rgba(201, 240, 58, 0.12);
+  background-color: rgb(201 240 58 / 12%);
 }
 
 .icon-tile--cardio {
   color: var(--mod-cardio);
-  background-color: rgba(59, 130, 246, 0.12);
+  background-color: rgb(59 130 246 / 12%);
 }
 
 .icon-tile--diet {
   color: var(--mod-diet);
-  background-color: rgba(249, 115, 22, 0.12);
+  background-color: rgb(249 115 22 / 12%);
 }
 
 .icon-tile--body {
   color: var(--mod-body);
-  background-color: rgba(168, 85, 247, 0.12);
+  background-color: rgb(168 85 247 / 12%);
 }
 
 .icon-tile--social {
   color: var(--mod-social);
-  background-color: rgba(6, 182, 212, 0.12);
+  background-color: rgb(6 182 212 / 12%);
 }
 </style>

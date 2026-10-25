@@ -1,5 +1,5 @@
 <template>
-  <view v-if="visible" class="top-notice" :class="`is-${tone}`">
+  <view v-if="visible" class="top-notice" :class="`is-${tone}`" :style="{ zIndex: overlayZ('topNotice') }">
     <view class="top-notice__body">
       <text class="top-notice__title">{{ title }}</text>
       <text v-if="message" class="top-notice__message">{{ message }}</text>
@@ -11,24 +11,25 @@
 </template>
 
 <script setup lang="ts">
+import { overlayZ } from '@/components/overlays/overlayStack';
 /**
  * 顶部弹窗（开发期专用）
  * 后端把模拟验证码直接返回给前端，用它从顶部滑下来提示，点右侧 × 关闭。
  * 页面正文不受影响：弹窗是 fixed 层，不占文档流。
  */
-import AppIcon from './AppIcon.vue'
+import AppIcon from './AppIcon.vue';
 
 withDefaults(
   defineProps<{
-    visible: boolean
-    title: string
-    message?: string
-    tone?: 'brand' | 'info'
+    visible: boolean;
+    title: string;
+    message?: string;
+    tone?: 'brand' | 'info';
   }>(),
   { message: '', tone: 'brand' },
-)
+);
 
-const emit = defineEmits<{ close: [] }>()
+const emit = defineEmits<{ close: [] }>();
 </script>
 
 <style lang="scss" scoped>
@@ -38,27 +39,26 @@ const emit = defineEmits<{ close: [] }>()
   top: calc(var(--window-top, 0px) + 48px);
   right: 12px;
   left: 12px;
-  z-index: 999;
   display: flex;
-  align-items: flex-start;
   gap: 10px;
+  align-items: flex-start;
   padding: 12px 14px;
   border-radius: var(--radius-md);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 10px 30px rgb(0 0 0 / 45%);
   animation: notice-in 0.18s ease-out;
 }
 
 .top-notice.is-brand {
   /* 不透明底：弹窗盖住顶部标题区时不能透出下面的字 */
   background: var(--surface-2);
-  border: 1px solid rgba(var(--brand-500-rgb), 0.55);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6), inset 3px 0 0 var(--brand-500);
+  border: 1px solid rgb(var(--brand-500-rgb), 0.55);
+  box-shadow: 0 12px 32px rgb(0 0 0 / 60%), inset 3px 0 0 var(--brand-500);
 }
 
 .top-notice.is-info {
   background: var(--surface-2);
   border: 1px solid var(--line-strong);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6), inset 3px 0 0 var(--brand-500);
+  box-shadow: 0 12px 32px rgb(0 0 0 / 60%), inset 3px 0 0 var(--brand-500);
 }
 
 .top-notice__body {
@@ -73,10 +73,10 @@ const emit = defineEmits<{ close: [] }>()
 }
 
 .top-notice__message {
-  font-variant-numeric: tabular-nums;
   display: block;
   margin-top: 4px;
   font-size: var(--fs-xs);
+  font-variant-numeric: tabular-nums;
   line-height: var(--lh-normal);
   color: var(--text-2);
 }

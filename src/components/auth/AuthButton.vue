@@ -21,39 +21,39 @@
  */
 withDefaults(
   defineProps<{
-    label: string
-    loading?: boolean
-    loadingText?: string
-    disabled?: boolean
-    ghost?: boolean
-    dense?: boolean
+    label: string;
+    loading?: boolean;
+    loadingText?: string;
+    disabled?: boolean;
+    ghost?: boolean;
+    dense?: boolean;
   }>(),
   { loading: false, loadingText: '处理中', disabled: false, ghost: false, dense: false },
-)
+);
 
-const emit = defineEmits<{ tap: [] }>()
+const emit = defineEmits<{ tap: [] }>();
 
 function onTap() {
-  emit('tap')
+  emit('tap');
 }
 </script>
 
 <style lang="scss" scoped>
 .auth-btn {
   display: flex;
+  gap: 8px;
   align-items: center;
   justify-content: center;
-  gap: 8px;
   width: 100%;
   height: 54px;
-  margin: 0;
   padding: 0;
+  margin: 0;
+  line-height: 1;
   background: var(--brand-500);
   border: none;
   border-radius: var(--radius-full);
-  line-height: 1;
   /* 设计稿 --glow：0 10px 30px rgba(201,240,58,.22) */
-  box-shadow: 0 10px 30px rgba(201, 240, 58, 0.22);
+  box-shadow: 0 10px 30px rgb(201 240 58 / 22%);
   transition:
     transform 0.14s ease,
     box-shadow 0.2s ease,
@@ -81,7 +81,7 @@ function onTap() {
 
 .auth-btn--hover {
   background: var(--brand-600);
-  box-shadow: 0 4px 16px rgba(201, 240, 58, 0.28);
+  box-shadow: 0 4px 16px rgb(201 240 58 / 28%);
   transform: scale(0.976);
 
   &.is-ghost {
@@ -93,8 +93,8 @@ function onTap() {
 .auth-btn__text {
   font-size: 16px;
   font-weight: 600;
-  letter-spacing: 0.01em;
   color: var(--on-brand);
+  letter-spacing: 0.01em;
 }
 
 .is-dense .auth-btn__text {
@@ -108,7 +108,7 @@ function onTap() {
 .auth-btn__spinner {
   width: 14px;
   height: 14px;
-  border: 2px solid rgba(11, 13, 18, 0.25);
+  border: 2px solid rgb(11 13 18 / 25%);
   border-top-color: var(--on-brand);
   border-radius: 50%;
   animation: auth-spin 0.8s linear infinite;

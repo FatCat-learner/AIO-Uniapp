@@ -26,10 +26,23 @@
       <AppIcon class="rsv__chev" name="chevron-right" :size="14" />
     </view>
   </AppCard>
+
+  <AppDialog
+    :visible="pendingCancel !== null"
+    tone="danger"
+    icon="calendar-remove-outline"
+    title="取消这次预约？"
+    :message="pendingCancel ? `${pendingCancel.time} · ${pendingCancel.title}` : ''"
+    confirm-text="取消预约"
+    cancel-text="再想想"
+    @update:visible="(v: boolean) => { if (!v) pendingCancel = null; }"
+    @confirm="confirmCancel"
+  />
 </template>
 
 <script setup lang="ts">
 import type { Reservation } from '@mocks/types';
+import { ref } from 'vue';
 /**
  * HomeReservationCard · 预约卡（UI 规范 V1.1 §5.1 ⑤）
  * 「计划」语义的卡一律用 1px 虚线（#3F4653）与实体卡区分：
@@ -39,6 +52,7 @@ import AppCard from '@/components/base/AppCard.vue';
 import AppCardHeader from '@/components/base/AppCardHeader.vue';
 import AppIcon from '@/components/base/AppIcon.vue';
 import AppIconTile from '@/components/base/AppIconTile.vue';
+import AppDialog from '@/components/overlays/AppDialog.vue';
 
 const props = defineProps<{
   title: string;
@@ -55,16 +69,15 @@ const emit = defineEmits<{
   (e: 'cancel', item: Reservation): void;
 }>();
 
+const pendingCancel = ref<Reservation | null>(null);
+
 function onLongPress(item: Reservation) {
-  uni.showModal({
-    title: '取消这次预约？',
-    content: `${item.time} · ${item.title}`,
-    confirmText: '取消预约',
-    cancelText: '再想想',
-    success: (res) => {
-      if (res.confirm) emit('cancel', item);
-    },
-  });
+  pendingCancel.value = item;
+}
+
+function confirmCancel() {
+  if (pendingCancel.value) emit('cancel', pendingCancel.value);
+  pendingCancel.value = null;
 }
 </script>
 
@@ -79,8 +92,8 @@ function onLongPress(item: Reservation) {
 
 .rsv__row {
   display: flex;
-  align-items: center;
   gap: var(--sp-3);
+  align-items: center;
   height: var(--row-h);
   margin-top: var(--sp-3);
   border-top: 1px solid var(--line);
@@ -103,10 +116,10 @@ function onLongPress(item: Reservation) {
 
 .rsv__m {
   overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 11px;
   line-height: 14px;
   color: var(--text-2);
-  text-overflow: ellipsis;
   white-space: nowrap;
 }
 

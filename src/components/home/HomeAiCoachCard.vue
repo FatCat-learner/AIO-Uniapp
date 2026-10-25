@@ -63,8 +63,8 @@ const emit = defineEmits<{
 
 .ai__hd {
   display: flex;
-  align-items: center;
   gap: var(--sp-2);
+  align-items: center;
 }
 
 .ai__badge {

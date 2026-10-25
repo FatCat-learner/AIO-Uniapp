@@ -122,8 +122,8 @@ const title = computed(() => '今日训练');
 /* 行：64 高、行间 1px、左右 20 */
 .wk-row {
   display: flex;
-  align-items: center;
   gap: var(--sp-2);
+  align-items: center;
   height: var(--row-h);
   padding: 0 var(--sp-5);
   border-top: 1px solid var(--line);
@@ -139,20 +139,20 @@ const title = computed(() => '今日训练');
 
 .wk-row__t {
   overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 15px;
   font-weight: 500;
   line-height: 20px;
   color: var(--text-1);
-  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .wk-row__m {
   overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 11px;
   line-height: 14px;
   color: var(--text-2);
-  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
@@ -160,8 +160,8 @@ const title = computed(() => '今日训练');
   display: flex;
   flex: none;
   flex-direction: column;
-  align-items: flex-end;
   gap: 1px;
+  align-items: flex-end;
   min-width: 88px;
 }
 
@@ -188,8 +188,8 @@ const title = computed(() => '今日训练');
 
 .slot__vrow {
   display: flex;
-  align-items: baseline;
   gap: 2px;
+  align-items: baseline;
 }
 
 .slot__u {
@@ -199,8 +199,8 @@ const title = computed(() => '今日训练');
 
 .slot__go {
   display: flex;
-  align-items: center;
   gap: var(--sp-1);
+  align-items: center;
   color: var(--brand-500);
 }
 

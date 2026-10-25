@@ -53,14 +53,14 @@ function handleResume() {
 <style lang="scss" scoped>
 .pill {
   display: flex;
+  visibility: hidden;
   align-items: center;
   justify-content: space-between;
   width: 176px;
   height: 48px;
   padding: 0 10px 0 14px;
-  visibility: hidden;
   background-color: var(--surface);
-  border: 1px solid rgba(201, 240, 58, 0.4);
+  border: 1px solid rgb(201 240 58 / 40%);
   border-radius: var(--radius-full);
   box-shadow: var(--glow);
   opacity: 0;
@@ -92,9 +92,9 @@ function handleResume() {
 .pill__time {
   font-size: 17px;
   font-weight: 600;
+  font-variant-numeric: tabular-nums;
   line-height: 20px;
   color: var(--brand-500);
-  font-variant-numeric: tabular-nums;
 }
 
 .pill__btn {

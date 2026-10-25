@@ -18,12 +18,26 @@ page {
   --brand-600: #b4dc22; // 按下态
   --brand-700: #9cc414; // 深端 / 渐变
   --brand-500-rgb: 201, 240, 58; // 供 rgba(var(--brand-500-rgb), .x)
-  --brand-50: rgba(201, 240, 58, 0.12); // 极浅品牌底：图标底、选中胶囊
-  --brand-100: rgba(201, 240, 58, 0.2); // 浅品牌底：进度环轨道、标签
+  --brand-50: rgb(201 240 58 / 12%); // 极浅品牌底：图标底、选中胶囊
+  --brand-100: rgb(201 240 58 / 20%); // 浅品牌底：进度环轨道、标签
   --on-brand: #0b0d12; // 落在品牌色上的文字 / 图标（深底反白）
   --ai-from: #c9f03a; // AI 渐变起点
   --ai-to: #06b6d4; // AI 渐变终点
   --gradient-ai: linear-gradient(135deg, var(--ai-from) 0%, var(--ai-to) 100%);
+  /* 品牌色 alpha 阶（后缀 = 不透明度 %；--brand-50/--brand-100 是 .12/.2 的旧名，保留） */
+  --brand-a6: rgb(201 240 58 / 6%);
+  --brand-a8: rgb(201 240 58 / 8%);
+  --brand-a9: rgb(201 240 58 / 9%);
+  --brand-a10: rgb(201 240 58 / 10%);
+  --brand-a14: rgb(201 240 58 / 14%);
+  --brand-a16: rgb(201 240 58 / 16%);
+  --brand-a22: rgb(201 240 58 / 22%);
+  --brand-a26: rgb(201 240 58 / 26%);
+  --brand-a28: rgb(201 240 58 / 28%);
+  --brand-a35: rgb(201 240 58 / 35%);
+  --brand-a50: rgb(201 240 58 / 50%);
+  --brand-a55: rgb(201 240 58 / 55%);
+  --brand-a70: rgb(201 240 58 / 70%);
 
   /* ==================== 模块色（图标底 / 分类 / 图表） ==================== */
   --mod-train: #c9f03a; // 力量训练
@@ -43,13 +57,23 @@ page {
   --warn: #f59e0b; // 超标 / 注意
   --danger: #ef4444; // 删除 / 错误 / 退出登录
   --info: #3b82f6; // 提示 / 中性信息
-  --danger-soft: rgba(239, 68, 68, 0.12); // 危险按钮底（Log Out 条）
+  --danger-soft: rgb(239 68 68 / 12%); // 危险按钮底（Log Out 条）
+  --danger-line: rgb(239 68 68 / 38%); // 危险描边 / 分隔线（删除区、错误输入框）
+  --warn-soft: rgb(245 158 11 / 12%); // 警告底（权限提示、待同步）
+  --info-soft: rgb(59 130 246 / 12%); // 信息底（引导、说明卡）
+  --danger-text: #ff7a7a; // 深色底上的危险文案（#ef4444 直接当文字偏暗）
+  --warn-text: #fbbf24; // 警告 / 待办文案
+  --ok-text: #4ade80; // 成功文案
 
   /* ==================== 文字（深色底） ==================== */
   --text-1: #ffffff; // 标题、数值、主信息
   --text-2: #9aa2b0; // 正文、副标题、标签
   --text-3: #6b7280; // 单位、时间戳、图例、占位
   --text-disabled: #3f4653;
+  --text-1-soft: #cfd6e2; // 主文字降一档（登录页标题、输入值）
+  --text-2-strong: #b9c2d0; // 正文强调（不需要纯白的副标题）
+  --text-4: #8b94a3; // 次级正文 / 表单说明（比 --text-2 暗一档）
+  --text-5: #5c6474; // 更弱：占位、辅助说明
   --on-dark: #0b0d12;
 
   /* ==================== 背景 / 分割线 ==================== */
@@ -59,15 +83,31 @@ page {
   --fill: #232833; // 输入框、序号方块、未选中 chip、标签底
   --line: #232833; // 1px 描边 / 分隔线
   --line-strong: #2e3546; // 强调描边（聚焦、选中卡）
-  --nav-bg: rgba(20, 23, 31, 0.86); // 悬浮 Dock 玻璃底（配合 backdrop-filter: blur(20px)）
-  --dock-bg: rgba(20, 23, 31, 0.86); // 同 nav-bg 的新名
+  --nav-bg: rgb(20 23 31 / 86%); // 悬浮 Dock 玻璃底（配合 backdrop-filter: blur(20px)）
+  --dock-bg: rgb(20 23 31 / 86%); // 同 nav-bg 的新名
   --dock-w: 282px; // Dock 宽（390 宽机器；其余按 calc(100vw - 16 - 8 - 60 - 16) 自适应）
   --dock-h: 60px; // Dock 高
   --dock-inset: 16px; // Dock 左右边距
   --dock-bottom: 12px; // Dock 距底（其下另加 34 安全区）
   --dock-gap: 8px; // Dock 与训练按钮的间距
   --content-inset-bottom: 108px; // 页面内容底部预留（60 + 12 + 34 + 2）
-  --mask: rgba(0, 0, 0, 0.6); // 弹层遮罩
+  --mask: rgb(0 0 0 / 60%); // 弹层遮罩
+  /* 白色描边 / 亮面阶（玻璃卡压边、分隔线、内高光） */
+  --line-white-03: rgb(255 255 255 / 3%);
+  --line-white-05: rgb(255 255 255 / 5%);
+  --line-white-06: rgb(255 255 255 / 6%);
+  --line-white-08: rgb(255 255 255 / 8%);
+  --line-white-10: rgb(255 255 255 / 10%);
+  --line-white-14: rgb(255 255 255 / 14%);
+  --line-white-34: rgb(255 255 255 / 34%);
+  --line-white-38: rgb(255 255 255 / 38%);
+
+  /* 深色玻璃阶（Sheet / 浮层底 / 压暗层） */
+  --glass-28: rgb(11 13 18 / 28%);
+  --glass-55: rgb(11 13 18 / 55%);
+  --glass-62: rgb(11 13 18 / 62%);
+  --glass-72: rgb(11 13 18 / 72%);
+  --glass-86: rgb(11 13 18 / 86%);
 
   /* ==================== 兼容旧命名（动作详情等沉浸页） ==================== */
   --dark-bg: #0b0d12;
@@ -87,10 +127,10 @@ page {
 
   /* ==================== 阴影 / 发光 ==================== */
   --shadow-card: none; // 深色下用描边与底色差分层，不用投影
-  --shadow-float: 0 12px 32px rgba(0, 0, 0, 0.55); // 悬浮气泡 / 弹层
-  --shadow-sheet: 0 -12px 40px rgba(0, 0, 0, 0.6); // BottomSheet
-  --glow: 0 0 24px rgba(var(--brand-500-rgb), 0.35); // FAB、进行中气泡
-  --ring-glow: 0 0 0 1px rgba(var(--brand-500-rgb), 0.5); // 选中描边
+  --shadow-float: 0 12px 32px rgb(0 0 0 / 55%); // 悬浮气泡 / 弹层
+  --shadow-sheet: 0 -12px 40px rgb(0 0 0 / 60%); // BottomSheet
+  --glow: 0 0 24px rgb(var(--brand-500-rgb), 0.35); // FAB、进行中气泡
+  --ring-glow: 0 0 0 1px rgb(var(--brand-500-rgb), 0.5); // 选中描边
 
   /* ==================== 字号（PDF 画板 1080pt ↔ 1440px，×4/3） ==================== */
   --fs-display: 28px; // 计时器、大数值
@@ -102,6 +142,12 @@ page {
   --fs-sm: 13px; // 次要说明
   --fs-xs: 12px; // 单位、图例
   --fs-2xs: 11px; // 角标、ALL CAPS 小标题
+  --fs-3xs: 10px; // 极小角标、密集说明
+  --fs-md: 16px; // 强调正文（比 --fs-body 大一档）
+  --fs-lg: 18px; // 小标题、输入值
+  --fs-xl: 22px; // 段落标题
+  --fs-2xl: 26px; // 大段落标题 / 大数字
+  --fs-display-lg: 32px; // 超大数值、欢迎页标语
 
   /* ==================== 间距（4/8pt 栅格） ====================
    * 规范 §2：页面与卡内间距只用这几档，禁止 7/9/13/18 这类随手数。
@@ -135,12 +181,12 @@ page {
   /* ==================== 12% 模块色底（IconTile / 胶囊 / 进度轨道） ====================
    * 规范 §4.5：图标底一律「模块色 12%」，禁止实色填充。
    */
-  --tint-train: rgba(201, 240, 58, 0.12);
-  --tint-cardio: rgba(59, 130, 246, 0.12);
-  --tint-diet: rgba(249, 115, 22, 0.12);
-  --tint-body: rgba(168, 85, 247, 0.12);
-  --tint-social: rgba(6, 182, 212, 0.12);
-  --tint-neutral: rgba(154, 162, 176, 0.12);
+  --tint-train: rgb(201 240 58 / 12%);
+  --tint-cardio: rgb(59 130 246 / 12%);
+  --tint-diet: rgb(249 115 22 / 12%);
+  --tint-body: rgb(168 85 247 / 12%);
+  --tint-social: rgb(6 182 212 / 12%);
+  --tint-neutral: rgb(154 162 176 / 12%);
   --line-dashed: #3f4653; // 虚线卡（预约 / 空态 / 添加卡片）
 
   /* ==================== 旧变量兼容（勿删） ==================== */
@@ -148,13 +194,11 @@ page {
   --theme-success: var(--ok);
   --theme-warning: var(--warn);
   --theme-error: var(--danger);
-
   --theme-main-color: var(--text-1);
   --theme-content-color: var(--text-2);
   --theme-tips-color: var(--text-3);
   --theme-light-color: var(--text-3);
   --theme-disabled-color: var(--text-disabled);
-
   --theme-bg-color: var(--bg);
   --theme-bg-color-secondary: var(--surface);
   --theme-border-color: var(--line);
@@ -167,25 +211,23 @@ page {
   --brand-500: #c9f03a;
   --brand-600: #b4dc22;
   --brand-500-rgb: 201, 240, 58;
-  --brand-50: rgba(201, 240, 58, 0.12);
-  --brand-100: rgba(201, 240, 58, 0.2);
+  --brand-50: rgb(201 240 58 / 12%);
+  --brand-100: rgb(201 240 58 / 20%);
   --on-brand: #0b0d12;
-
   --text-1: #ffffff;
   --text-2: #9aa2b0;
   --text-3: #6b7280;
   --text-disabled: #3f4653;
   --on-dark: #0b0d12;
-
   --bg: #0b0d12;
   --surface: #14171f;
   --surface-2: #1b1f29;
   --fill: #232833;
   --line: #232833;
   --line-strong: #2e3546;
-  --nav-bg: rgba(20, 23, 31, 0.86);
-  --dock-bg: rgba(20, 23, 31, 0.86);
-  --mask: rgba(0, 0, 0, 0.6);
+  --nav-bg: rgb(20 23 31 / 86%);
+  --dock-bg: rgb(20 23 31 / 86%);
+  --mask: rgb(0 0 0 / 60%);
 }
 
 /**
@@ -197,29 +239,26 @@ page {
   --brand-500: #a8cc22;
   --brand-600: #97b81a;
   --brand-500-rgb: 168, 204, 34;
-  --brand-50: rgba(168, 204, 34, 0.12);
-  --brand-100: rgba(168, 204, 34, 0.2);
+  --brand-50: rgb(168 204 34 / 12%);
+  --brand-100: rgb(168 204 34 / 20%);
   --on-brand: #ffffff;
-
   --text-1: #101828;
   --text-2: #475467;
   --text-3: #98a2b3;
   --text-disabled: #d0d5dd;
   --on-dark: #ffffff;
-
   --bg: #f2f3f5;
   --surface: #ffffff;
   --surface-2: #f7f8fa;
   --fill: #f1f2f4;
   --line: #eaecf0;
   --line-strong: #d0d5dd;
-  --nav-bg: rgba(255, 255, 255, 0.92);
-  --dock-bg: rgba(255, 255, 255, 0.92);
-  --mask: rgba(0, 0, 0, 0.4);
+  --nav-bg: rgb(255 255 255 / 92%);
+  --dock-bg: rgb(255 255 255 / 92%);
+  --mask: rgb(0 0 0 / 40%);
   --line-dashed: #c9ced6;
-
-  --shadow-card: 0 1px 2px rgba(16, 24, 40, 0.04);
-  --glow: 0 0 24px rgba(var(--brand-500-rgb), 0.28);
+  --shadow-card: 0 1px 2px rgb(16 24 40 / 4%);
+  --glow: 0 0 24px rgb(var(--brand-500-rgb), 0.28);
 }
 
 /* ==================== 主题工具类 ==================== */
@@ -240,8 +279,8 @@ page {
 }
 
 .theme-brand {
-  background-color: var(--brand-500);
   color: var(--on-brand);
+  background-color: var(--brand-500);
 }
 
 .theme-text {

@@ -69,10 +69,10 @@
  * - 光圈：scale 1 → 1.42 并淡出，3.6s ease-out 无限循环。
  * 两个动画都只改 transform / stroke-dashoffset / opacity，不触发重排。
  */
-import { getCurrentInstance } from 'vue'
+import { getCurrentInstance } from 'vue';
 
 // 同一页面可能出现多个实例，渐变 id 必须唯一，否则第二个会把第一个的弧线染成空
-const gradientId = `logo-arc-${getCurrentInstance()?.uid ?? 0}`
+const gradientId = `logo-arc-${getCurrentInstance()?.uid ?? 0}`;
 </script>
 
 <style lang="scss" scoped>
@@ -86,17 +86,17 @@ const gradientId = `logo-arc-${getCurrentInstance()?.uid ?? 0}`
 .logo__rule {
   width: 1px;
   height: 16px;
-  background: linear-gradient(to bottom, transparent, rgba(201, 240, 58, 0.7));
+  background: linear-gradient(to bottom, transparent, rgb(201 240 58 / 70%));
 }
 
 .logo__word {
   margin-top: 10px;
   font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.42em;
-  color: rgba(255, 255, 255, 0.62);
+  color: rgb(255 255 255 / 62%);
   /* letter-spacing 会在最后一个字母后多留一格，用等量缩进抵消，视觉才真正居中 */
   text-indent: 0.42em;
+  letter-spacing: 0.42em;
 }
 
 .logo__ring {
@@ -146,7 +146,7 @@ const gradientId = `logo-arc-${getCurrentInstance()?.uid ?? 0}`
   position: absolute;
   width: 104px;
   height: 104px;
-  border: 1px solid rgba(201, 240, 58, 0.28);
+  border: 1px solid rgb(201 240 58 / 28%);
   border-radius: 32px;
   animation: logo-pulse 3.6s ease-out infinite;
 }
@@ -178,9 +178,9 @@ const gradientId = `logo-arc-${getCurrentInstance()?.uid ?? 0}`
   background: linear-gradient(160deg, #1e2530, #12161d);
   border-radius: 32px;
   box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.07),
-    0 18px 40px rgba(0, 0, 0, 0.5),
-    0 0 34px rgba(201, 240, 58, 0.14);
+    inset 0 0 0 1px rgb(255 255 255 / 7%),
+    0 18px 40px rgb(0 0 0 / 50%),
+    0 0 34px rgb(201 240 58 / 14%);
 }
 
 /* 字标：logo-mark.svg 的视图框已经收到字形外沿，66% 才等于预演里 57% 的字形占比 */

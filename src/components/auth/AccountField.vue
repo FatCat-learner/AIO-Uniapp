@@ -28,7 +28,7 @@
         :placeholder="placeholder"
         placeholder-class="acc__ph"
         @input="onInput"
-      />
+      >
     </view>
 
     <CountrySheet
@@ -41,50 +41,51 @@
 </template>
 
 <script setup lang="ts">
+import type { AccountType, IAccountValue, ICountry } from './constants';
 /**
  * 账号输入组件 AccountField（§16.11）
  * 一处实现，四处调用：登录 / 验证码登录 / 注册① / 忘记密码①
  * - 手机号：区号选择 + 11 位号码；切邮箱自动隐藏区号、换信封图标
  * - 切换 tab 清空输入，避免「手机号残留进邮箱」
  */
-import { computed, ref } from 'vue'
-import AppIcon from '@/components/base/AppIcon.vue'
-import CountrySheet from './CountrySheet.vue'
-import { DEFAULT_COUNTRY, type AccountType, type IAccountValue, type ICountry } from './constants'
+import { computed, ref } from 'vue';
+import AppIcon from '@/components/base/AppIcon.vue';
+import { DEFAULT_COUNTRY } from './constants';
+import CountrySheet from './CountrySheet.vue';
 
 const props = withDefaults(
   defineProps<{
-    modelValue: IAccountValue
-    label?: string
-    tabs?: boolean
+    modelValue: IAccountValue;
+    label?: string;
+    tabs?: boolean;
   }>(),
   { label: '', tabs: true },
-)
+);
 
-const emit = defineEmits<{ 'update:modelValue': [value: IAccountValue] }>()
+const emit = defineEmits<{ 'update:modelValue': [value: IAccountValue] }>();
 
-const sheetVisible = ref(false)
+const sheetVisible = ref(false);
 
-const placeholder = computed(() => (props.modelValue.type === 'phone' ? '11 位手机号' : 'you@example.com'))
+const placeholder = computed(() => (props.modelValue.type === 'phone' ? '11 位手机号' : 'you@example.com'));
 /** 不传 label 时按类型自动显示，传空字符串才是真的不要 */
-const showLabel = computed(() => props.label !== 'none')
+const showLabel = computed(() => props.label !== 'none');
 
 function patch(partial: Partial<IAccountValue>) {
-  emit('update:modelValue', { ...props.modelValue, ...partial })
+  emit('update:modelValue', { ...props.modelValue, ...partial });
 }
 
 function switchType(type: AccountType) {
-  if (type === props.modelValue.type) return
-  patch({ type, value: '', dial: props.modelValue.dial || DEFAULT_COUNTRY.dial })
+  if (type === props.modelValue.type) return;
+  patch({ type, value: '', dial: props.modelValue.dial || DEFAULT_COUNTRY.dial });
 }
 
 function onInput(event: any) {
-  patch({ value: event.detail.value })
+  patch({ value: event.detail.value });
 }
 
 function onPickCountry(item: ICountry) {
-  patch({ dial: item.dial })
-  sheetVisible.value = false
+  patch({ dial: item.dial });
+  sheetVisible.value = false;
 }
 </script>
 
@@ -106,8 +107,8 @@ function onPickCountry(item: ICountry) {
   flex: 1;
   align-items: center;
   justify-content: center;
-  border-radius: var(--radius-sm);
   background: transparent;
+  border-radius: var(--radius-sm);
 
   &.is-on {
     background: var(--fill);
@@ -147,8 +148,8 @@ function onPickCountry(item: ICountry) {
 
 .acc__dial {
   display: flex;
-  align-items: center;
   gap: 2px;
+  align-items: center;
 }
 
 .acc__dial-text {

@@ -10,6 +10,8 @@
 
 使用 **uni-app + vite + vue3 + typescript + uview-plus + unocss** 搭建的适合**团队协作**的快速开发模版。本项目集众多优秀项目的优点，旨在打造最适合团队协作开发的高效脚手架。
 
+> 📐 **开发约定**：页面分层（四件套）、单文件体积红线、`pnpm gen:page` 脚手架、store / api 边界，见 [docs/前端开发规范.md](docs/前端开发规范.md)。新建页面先跑 `pnpm gen:page <name> "<标题>"`，不要手搓。
+
 | 技术栈 |  描述  |
 | ---  | ----- |
 |框架/构建 |	Uni-app, Vue 3, Vite, TypeScript|

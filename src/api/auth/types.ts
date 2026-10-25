@@ -42,9 +42,9 @@ export interface IAuthCodeSendRequest {
 
 export interface ICodeSendResponse {
   /** 开发期后端直接下发模拟验证码，前端用顶部弹窗展示 */
-  code: string
-  expires_in: number
-  mock: boolean
+  code: string;
+  expires_in: number;
+  mock: boolean;
 }
 
 export interface ICodeLoginRequest {
