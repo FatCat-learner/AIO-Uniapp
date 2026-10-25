@@ -22,5 +22,6 @@ const setupStore = (app: App) => {
 export { useAuthStore };
 export { useDiscoverStore } from './discover';
 export { useHomeStore } from './home';
+export { default as useMembershipStore } from './membership';
 
 export default setupStore;

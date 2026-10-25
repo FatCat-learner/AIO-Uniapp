@@ -4,9 +4,22 @@ import type {
   HttpRequestConfig,
   HttpResponse,
 } from 'uview-plus/libs/luch-request/index';
-import { getToken } from '@/utils/auth';
+import { FIRST_SCREEN_URL, getToken, removeRefreshToken, removeToken, removeTokenType } from '@/utils/auth';
 import storage from '@/utils/storage';
 import { showMessage } from './status';
+
+/**
+ * 登录态失效：清掉本地凭证 + 回首屏重新登录。
+ * 这里不 import auth store —— store 依赖 api 依赖 request，反向 import 会成环。
+ */
+const resetAuth = () => {
+  removeToken();
+  removeTokenType();
+  removeRefreshToken();
+  // pinia 持久化把整份 auth state 也存了一份，只清 token 的话刷新后又“复活”
+  storage.remove('auth');
+  uni.reLaunch({ url: FIRST_SCREEN_URL });
+};
 
 // 重试队列，每一项将是一个待执行的函数形式
 // let requestQueue: (() => void)[] = [];
@@ -81,9 +94,9 @@ function requestInterceptors(http: HttpRequestAbstract) {
 
       // 是否需要设置 token
       const isToken = custom?.auth === false;
-      if (getToken() && !isToken && config.header) {
-        // token设置
-        config.header.token = getToken();
+      if (getToken() && !isToken) {
+        // 后端 OAuth2PasswordBearer 只认 Authorization: Bearer <token>
+        config.header = { ...(config.header || {}), Authorization: `Bearer ${getToken()}` };
       }
 
       // 是否显示 loading
@@ -118,9 +131,15 @@ function responseInterceptors(http: HttpRequestAbstract) {
     // 自定义参数
     const custom = config?.custom;
 
-    // 登录状态失效，重新登录
+    // 登录状态失效，清凭证回首屏；还没登录（拿不到 token 的登录请求）交给页面自己提示
     if (data.code === 401) {
-      // return refreshToken(http, config);
+      if (getToken()) {
+        if (custom?.loading) {
+          uni.hideLoading();
+        }
+        resetAuth();
+      }
+      return Promise.reject(data);
     }
 
     // 隐藏loading
@@ -129,7 +148,10 @@ function responseInterceptors(http: HttpRequestAbstract) {
     }
 
     // 请求成功则返回结果
-    if (data.code === 200) {
+    // 后端信封里的 code 与 HTTP 状态码一致（注册成功是 201），所以按 2xx 判成功；
+    // 只认 200 会让「注册成功」被当成失败：既弹了成功文案，又不会跳登录页。
+    const bizCode = typeof data?.code === 'number' ? data.code : response.statusCode;
+    if (bizCode >= 200 && bizCode < 300) {
       return response || {};
     }
 
@@ -147,6 +169,19 @@ function responseInterceptors(http: HttpRequestAbstract) {
     // 隐藏loading
     if (custom?.loading !== false) {
       uni.hideLoading();
+    }
+
+    // 登录态失效：已登录的 token 过期/被踢 → 清凭证 + 回首屏；
+    // 本来就还没登录（如登录接口返回 401 密码错）→ 不跳转，让页面提示
+    if (response.statusCode === 401) {
+      if (getToken()) {
+        resetAuth();
+        return Promise.reject(response);
+      }
+      if (custom?.toast !== false) {
+        uni.$u.toast(response.data?.message || '账号或密码错误');
+      }
+      return Promise.reject(response);
     }
 
     // 如果没有显式定义custom的toast参数为false的话，默认对报错进行toast弹出提示

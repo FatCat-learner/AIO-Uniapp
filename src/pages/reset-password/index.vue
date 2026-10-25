@@ -23,6 +23,7 @@
     </template>
 
     <CaptchaModal :visible="captchaVisible" @close="captchaVisible = false" @success="onCaptchaPass" />
+    <AccountNotRegisteredDialog ref="notRegistered" @switch-account="onSwitchAccount" />
   </AuthScaffold>
 </template>
 
@@ -35,6 +36,7 @@ import type { ResetStep } from './config';
 import { computed, ref } from 'vue';
 import { resetPassword } from '@/api/auth';
 import AccountField from '@/components/auth/AccountField.vue';
+import AccountNotRegisteredDialog from '@/components/auth/AccountNotRegisteredDialog.vue';
 import AuthButton from '@/components/auth/AuthButton.vue';
 import AuthFootLink from '@/components/auth/AuthFootLink.vue';
 import AuthScaffold from '@/components/auth/AuthScaffold.vue';
@@ -47,6 +49,12 @@ import { useAuthAccount } from '@/composables/useAuthAccount';
 import { useAuthCode } from '@/composables/useAuthCode';
 import { useAuthSteps } from '@/composables/useAuthSteps';
 import { usePasswordConfirm } from '@/composables/usePasswordConfirm';
+import {
+  ACCOUNT_NOT_REGISTERED,
+  getErrorMessage,
+  getErrorReason,
+  setAuthPrefill,
+} from '@/utils/auth';
 import { toast } from '@/utils/ui';
 import { RESET_DESC, RESET_SCENE, resetTitle } from './config';
 
@@ -63,6 +71,7 @@ const password = ref('');
 const confirm = ref('');
 const submitting = ref(false);
 const codeField = ref<InstanceType<typeof VerifyCodeField> | null>(null);
+const notRegistered = ref<InstanceType<typeof AccountNotRegisteredDialog> | null>(null);
 const mismatch = usePasswordConfirm(password, confirm);
 const { notice, captchaVisible, requestCode, onCaptchaPass } = useAuthCode({
   account,
@@ -70,6 +79,11 @@ const { notice, captchaVisible, requestCode, onCaptchaPass } = useAuthCode({
   scene: RESET_SCENE,
   codeField,
 });
+
+/** 弹窗里选「换个账号」：清空账号框，回第 1 步重输 */
+function onSwitchAccount() {
+  account.value = { ...account.value, value: '' };
+}
 
 async function next() {
   if (!accountText.value) {
@@ -97,10 +111,19 @@ async function submit() {
       password: password.value,
     });
     toast('密码已修改');
+    // 回登录页时把账号和新密码一起带过去，免得再输一遍
+    setAuthPrefill({
+      account: { ...account.value, value: accountText.value },
+      password: password.value,
+    });
     setTimeout(goLogin, AUTH_REDIRECT_DELAY);
   }
   catch (error: any) {
-    toast(error?.message || '修改失败，请稍后再试');
+    if (getErrorReason(error) === ACCOUNT_NOT_REGISTERED) {
+      notRegistered.value?.open({ ...account.value, value: accountText.value });
+      return;
+    }
+    toast(getErrorMessage(error, '修改失败，请稍后再试'));
   }
   finally {
     submitting.value = false;

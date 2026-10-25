@@ -35,7 +35,7 @@ import OAuthRow from '@/components/auth/OAuthRow.vue';
 import PasswordField from '@/components/auth/PasswordField.vue';
 import { useAuthAccount } from '@/composables/useAuthAccount';
 import useAuthStore from '@/store/auth';
-import { setToken } from '@/utils/auth';
+import { getErrorMessage, setToken, takeAuthPrefill } from '@/utils/auth';
 import { detectPlatform } from '@/utils/platform';
 import { toast } from '@/utils/ui';
 import {
@@ -54,6 +54,13 @@ const { account, accountText } = useAuthAccount();
 const password = ref('');
 const loading = ref(false);
 const platform = detectPlatform();
+
+// 注册成功后跳回来：账号密码已经带过来，直接填好（只消费一次，之后进登录页是空的）
+const prefill = takeAuthPrefill();
+if (prefill) {
+  account.value = prefill.account;
+  password.value = prefill.password;
+}
 
 function back() {
   uni.navigateBack();
@@ -74,7 +81,8 @@ async function submit() {
     await enterApp();
   }
   catch (error: any) {
-    toast(error?.message || '登录失败，请稍后再试');
+    // 密码登录不区分「没注册」和「密码错」，后端统一给「账号或密码错误」
+    toast(getErrorMessage(error, '账号或密码错误'));
   }
   finally {
     loading.value = false;
@@ -104,11 +112,17 @@ async function doOauth(provider: OAuthProvider) {
 }
 
 /**
- * 过一遍权限守卫再进首页：
- * 先确认 token 能换回用户信息（拦截器负责 401 刷新/踢出），再 reLaunch。
+ * 登录成功后的收尾：把用户信息补到 store，再进首页。
+ * /users/me 失败（后端没起、网络抖动）不能拖住登录——token 已经拿到了，
+ * 失败就跳过；真失效的 token 进首页后会被请求拦截器统一踢回首屏。
  */
 async function enterApp() {
-  await authStore.info();
+  try {
+    await authStore.info();
+  }
+  catch {
+    // 忽略：登录本身已成功，用户信息可以稍后再补
+  }
   uni.reLaunch({ url: HOME_URL });
 }
 

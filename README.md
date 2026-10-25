@@ -209,6 +209,20 @@ pnpm dev:h5
 pnpm dev:mp-weixin
 ```
 
+#### 1.1 本地联调：mock 与真后端
+
+H5 dev 下请求经 vite 中间件，默认「业务接口 mock、认证接口打真后端」：
+
+| 变量（`env/.env.development`） | 默认 | 作用 |
+| --- | --- | --- |
+| `VITE_APP_MOCK` | `true` | 业务接口走 mock（`/api/home`、`/api/workouts`、`/api/actions`…） |
+| `VITE_APP_MOCK_AUTH` | `false` | **登录 / 注册 / `/users/me` 默认不 mock**，直连 `VITE_API_BASE_URL`（默认 `http://localhost:8000`）；后端没起时设 `true` 用假登录（任意账号密码都能进） |
+| `VITE_APP_MOCK_LOG` | 空 | 设 `true` 时每条命中的 mock 打一行日志 |
+
+- 先起后端（`aio-backend`，8000），再 `pnpm dev:h5`，用 **admin / 12345** 登录（后端启动时由 `src/core/seed.py` 幂等写入，禁用/改密会自动修回）。
+- 代理不要 rewrite 掉 `/api`：后端所有路由都挂在 `/api` 下，strip 掉会 404（见 `build/config/proxy.ts`）。
+- 鉴权头统一 `Authorization: Bearer <token>`；响应信封 `{ code, data, message, status }` 由 `src/utils/request/index.ts` 解包。mock 目录说明见 `mocks/README.md`。
+
 #### 2. 项目发布（构建）
 
 ```bash

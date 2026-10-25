@@ -17,6 +17,7 @@
     </template>
 
     <CaptchaModal :visible="captchaVisible" @close="captchaVisible = false" @success="onCaptchaPass" />
+    <AccountNotRegisteredDialog ref="notRegistered" @switch-account="onSwitchAccount" />
   </AuthScaffold>
 </template>
 
@@ -28,6 +29,7 @@
 import { ref } from 'vue';
 import { codeLogin } from '@/api/auth';
 import AccountField from '@/components/auth/AccountField.vue';
+import AccountNotRegisteredDialog from '@/components/auth/AccountNotRegisteredDialog.vue';
 import AuthButton from '@/components/auth/AuthButton.vue';
 import AuthFootLink from '@/components/auth/AuthFootLink.vue';
 import AuthScaffold from '@/components/auth/AuthScaffold.vue';
@@ -36,7 +38,12 @@ import VerifyCodeField from '@/components/auth/VerifyCodeField.vue';
 import AppTopNotice from '@/components/base/AppTopNotice.vue';
 import { useAuthAccount } from '@/composables/useAuthAccount';
 import { useAuthCode } from '@/composables/useAuthCode';
-import { setToken } from '@/utils/auth';
+import {
+  ACCOUNT_NOT_REGISTERED,
+  getErrorMessage,
+  getErrorReason,
+  setToken,
+} from '@/utils/auth';
 import { toast } from '@/utils/ui';
 import { CODE_LOGIN_DESC, CODE_LOGIN_SCENE, CODE_LOGIN_TITLE } from './config';
 
@@ -46,6 +53,7 @@ const { account, accountText } = useAuthAccount();
 const code = ref('');
 const loading = ref(false);
 const codeField = ref<InstanceType<typeof VerifyCodeField> | null>(null);
+const notRegistered = ref<InstanceType<typeof AccountNotRegisteredDialog> | null>(null);
 const { notice, captchaVisible, requestCode, onCaptchaPass } = useAuthCode({
   account,
   accountText,
@@ -55,6 +63,11 @@ const { notice, captchaVisible, requestCode, onCaptchaPass } = useAuthCode({
 
 function back() {
   uni.navigateBack();
+}
+
+/** 弹窗里选「换个账号」：清空账号框，留在本页重新输 */
+function onSwitchAccount() {
+  account.value = { ...account.value, value: '' };
 }
 
 async function submit() {
@@ -77,7 +90,11 @@ async function submit() {
     uni.reLaunch({ url: '/pages/index/index' });
   }
   catch (error: any) {
-    toast(error?.message || '验证码不对，或已过期');
+    if (getErrorReason(error) === ACCOUNT_NOT_REGISTERED) {
+      notRegistered.value?.open({ ...account.value, value: accountText.value });
+      return;
+    }
+    toast(getErrorMessage(error, '验证码不对，或已过期'));
   }
   finally {
     loading.value = false;

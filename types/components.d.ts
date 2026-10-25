@@ -12,6 +12,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AccountField: typeof import('./../src/components/auth/AccountField.vue')['default']
+    AccountNotRegisteredDialog: typeof import('./../src/components/auth/AccountNotRegisteredDialog.vue')['default']
     AppActionSheet: typeof import('./../src/components/overlays/AppActionSheet.vue')['default']
     AppBlocking: typeof import('./../src/components/overlays/AppBlocking.vue')['default']
     AppCard: typeof import('./../src/components/base/AppCard.vue')['default']

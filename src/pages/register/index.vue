@@ -71,6 +71,7 @@ import { useAuthAccount } from '@/composables/useAuthAccount';
 import { useAuthCode } from '@/composables/useAuthCode';
 import { useAuthSteps } from '@/composables/useAuthSteps';
 import { usePasswordConfirm } from '@/composables/usePasswordConfirm';
+import { setAuthPrefill, takeAuthPrefill } from '@/utils/auth';
 import { isMiniProgram } from '@/utils/platform';
 import { toast } from '@/utils/ui';
 import {
@@ -89,6 +90,10 @@ const isMp = isMiniProgram();
 const current = ref<RegisterStep>(1);
 const { account, accountText } = useAuthAccount();
 const { checking, stepText: step, advance, back } = useAuthSteps(current);
+
+// 从登录页「账号未注册」跳过来时账号已带好，用户只需验证码 + 设密码
+const prefill = takeAuthPrefill();
+if (prefill?.account?.value) account.value = prefill.account;
 
 const title = computed(() => registerTitle(current.value, account.value.type));
 const desc = computed(() => REGISTER_DESC[current.value]);
@@ -144,6 +149,11 @@ async function submit() {
       password: password.value,
     });
     toast('账号已创建，请登录');
+    // 账号密码带回去，登录页直接填好，不用再手输一遍
+    setAuthPrefill({
+      account: { ...account.value, value: accountText.value },
+      password: password.value,
+    });
     setTimeout(() => uni.reLaunch({ url: LOGIN_PAGE_URL }), AUTH_REDIRECT_DELAY);
   }
   catch (error: any) {

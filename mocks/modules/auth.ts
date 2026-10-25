@@ -1,8 +1,11 @@
 /**
- * 认证接口 mock —— 对齐 `src/api/auth/index.ts`
+ * 认证接口 mock（**默认不启用**，开关见 mocks/index.ts 的 VITE_APP_MOCK_AUTH）
  *   POST /auth/login      → LoginResult
  *   POST /auth/register   → UserInfo
  *   GET  /auth/user/me    → UserInfo
+ *
+ * 默认这些接口不拦，直接落 vite 代理打真后端（admin / 12345）。
+ * 只有纯前端演示、后端没起时才把 VITE_APP_MOCK_AUTH 设成 true。
  *
  * 规则：
  * - 同一个 username 永远得到同一个用户（按 username reseed），反复登录看到的是同一份数据；

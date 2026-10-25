@@ -17,13 +17,13 @@
           </text>
         </view>
 
-        <!-- 二级分堆：紧跟所属项（目前只有「胸」有上胸 / 中下胸） -->
+        <!-- 二级分堆：紧跟所属项（有 MUSCLE_SUBS 的大肌群才展开，见 config/discover.ts） -->
         <view v-if="it.kids" class="kids">
           <view
             v-for="k in kids"
             :key="k"
             class="kid"
-            :class="{ 'is-on': chestSub === k }"
+            :class="{ 'is-on': subSel === k }"
             hover-class="u-hover"
             @tap="emit('selectKid', k)"
           >
@@ -155,7 +155,28 @@
           </view>
         </template>
       </view>
-      <view class="tail">
+
+      <!-- 该档位还没有动作：固定字段先占位，等自定义动作往里填（CONFIG/discover.ts 的 PARTS） -->
+      <view v-if="!sections.length" class="empty">
+        <view class="empty__ic">
+          <AppIcon name="dumbbell" :size="32" color="#4b5361" />
+        </view>
+        <text class="empty__t">
+          「{{ railSel }}」还没有动作
+        </text>
+        <text class="empty__d">
+          这一档已经占好位置，之后可以往里加自定义动作
+        </text>
+        <view class="empty__acts">
+          <view class="act act--ghost" hover-class="u-hover" @tap="emit('selectRail', { key: '全部', label: '全部', kids: false })">
+            <text class="act__t">
+              先看全部动作
+            </text>
+          </view>
+        </view>
+      </view>
+
+      <view v-if="sections.length" class="tail">
         — 已经到底了 —
       </view>
     </scroll-view>
@@ -187,7 +208,7 @@ const props = defineProps<{
   rail: RailItem[];
   railSel: string;
   kids: string[];
-  chestSub: string;
+  subSel: string;
   sections: Sec[];
   anchor: string;
   activeGroup: string;

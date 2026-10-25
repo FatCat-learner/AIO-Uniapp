@@ -7,10 +7,11 @@ export const createViteProxy = (env: Record<string, string>) => {
   // 不使用代理直接返回
   if (!JSON.parse(VITE_APP_PROXY)) return undefined;
   const proxy: ProxyTargetList = {
+    // 后端所有路由都挂在 /api 下（aio-backend 的 app.include_router(..., prefix="/api")），
+    // 所以这里只转发、不能把 /api 前缀 rewrite 掉，否则 /api/auth/login 到了后端变 /auth/login → 404
     [VITE_API_PREFIX]: {
       target: VITE_API_BASE_URL,
       changeOrigin: true,
-      rewrite: path => path.replace(new RegExp(`^${VITE_API_PREFIX}`), ''),
     },
   };
   return proxy;

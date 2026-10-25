@@ -39,8 +39,12 @@ mocks/
 | 变量 | 位置 | 作用 |
 | --- | --- | --- |
 | `VITE_APP_MOCK` | `env/.env.development` | 设成 `false` 关闭 mock（走真实后端） |
+| `VITE_APP_MOCK_AUTH` | 同上 | 默认 `false`：登录/注册/用户信息**不走 mock**，直接打真后端（admin / 12345）；设 `true` 才把 `modules/auth.ts` 的假登录加回来（后端没起时纯前端演示用） |
 | `VITE_APP_MOCK_LOG` | 同上 | 设成 `true` 时每条命中打一行 `[vite:mock] request invoke` |
 | `VITE_APP_PROXY` | 同上 | 必须为 `true`，baseURL 才会是同源的 `VITE_API_PREFIX`，mock 才拦得住 |
+
+> 认证接口不再 mock 之后，`/api/auth/**` 与 `/api/users/me` 都由 vite 代理转给 `VITE_API_BASE_URL`（默认 `http://localhost:8000`），所以要先把后端起起来；其余 `/api/home`、`/api/workouts` 等仍由 mock 返回。
+
 
 > mock 是 Vite 中间件，只拦**同源**请求。H5 + 代理模式才生效；`baseURL` 是绝对地址（如 `http://127.0.0.1:8000`）时请求根本不经过 dev server。小程序端同样不走 Vite 中间件。
 

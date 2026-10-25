@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import { onHide, onLaunch, onShow } from '@dcloudio/uni-app';
+import { FIRST_SCREEN_URL, getToken } from '@/utils/auth';
 
 onLaunch(() => {
-  console.log('App Launch');
+  // 没有登录态：启动默认落到首屏（Welcome），登录入口只有首屏的「开始使用」
+  if (!getToken()) {
+    uni.reLaunch({ url: FIRST_SCREEN_URL });
+  }
 });
 onShow(() => {
   console.log('App Show');

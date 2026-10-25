@@ -25,9 +25,15 @@ export function setupRequest() {
 export function request<T = any>(config: HttpRequestConfig): Promise<T> {
   return new Promise((resolve, reject) => {
     http.request(config).then((res: HttpResponse<IResponse<T>>) => {
-      console.log('[ res ] >', res);
-      const { data } = res;
-      resolve(data as T);
+      const body = res.data as unknown as IResponse<T>;
+      // 后端统一包一层 { code, data, message, status }，这里解包，
+      // 调用方直接拿 data（如登录拿 access_token），不用每处再 .data
+      if (body && typeof body === 'object' && 'code' in body && 'data' in body) {
+        resolve(body.data as T);
+      }
+      else {
+        resolve(body as unknown as T);
+      }
     }).catch((err: any) => {
       console.error('[ err ] >', err);
       reject(err);

@@ -46,7 +46,7 @@
       :rail="railItems"
       :rail-sel="railSel"
       :kids="kids"
-      :chest-sub="chestSub"
+      :sub-sel="subSel"
       :sections="sections"
       :anchor="anchor"
       :active-group="activeGroup"
@@ -91,14 +91,14 @@ import DiscoverTabs from './components/DiscoverTabs.vue';
 import ScanSheet from './components/ScanSheet.vue';
 import SearchPanel from './components/SearchPanel.vue';
 import { useSectionScroll } from './composables/useSectionScroll';
-import { CATS, CHEST_SUBS, DIM } from './config';
+import { CATS, DIM, subsOf } from './config';
 
 const store = useDiscoverStore();
 
 const cat = ref<CatKey>('action');
 const query = ref('');
 const railSel = ref('全部');
-const chestSub = ref('');
+const subSel = ref('');
 const activeGroup = ref('');
 const scanOpen = ref(false);
 const scanDone = ref(false);
@@ -131,17 +131,20 @@ const railItems = computed<RailItem[]>(() => {
   list.push({ key: '全部', label: '全部' });
   const field = DIM[cat.value].rail as string;
   if (!field) return list;
-  const vals = DIM[cat.value].railOrder.length
-    ? DIM[cat.value].railOrder
+  const fixed = DIM[cat.value].railOrder;
+  const vals = fixed.length
+    ? fixed
     : (Array.from(new Set(rows.value.map(r => r[field]))) as string[]);
   vals.forEach((v) => {
-    if (rows.value.some(r => r[field] === v)) list.push({ key: v, label: v, kids: cat.value === 'action' && v === '胸' });
+    // 动作部位是「固定字段」：即使还没有动作也照样列出（空档位 = 以后自定义动作的入口）
+    if (cat.value !== 'action' && !rows.value.some(r => r[field] === v)) return;
+    list.push({ key: v, label: v, kids: cat.value === 'action' && subsOf(v).length > 0 });
   });
   return list;
 });
 
-/** 胸的二级（只在选中「胸」时出现） */
-const kids = computed(() => (cat.value === 'action' && railSel.value === '胸' ? CHEST_SUBS : []));
+/** 大肌群的二级（小肌群）：跟着左栏选中项走，没有二级就返回空 */
+const kids = computed(() => (cat.value === 'action' ? subsOf(railSel.value) : []));
 
 /** 选中分堆 → 过滤 → 按 DIM.group 分组成分区 */
 const sections = computed<Sec[]>(() => {
@@ -150,7 +153,7 @@ const sections = computed<Sec[]>(() => {
   let list = rows.value as Row[];
   if (sel === '收藏') list = list.filter(r => isFav(r.n));
   else if (sel !== '全部' && field) list = list.filter(r => r[field] === sel);
-  if (cat.value === 'action' && chestSub.value) list = list.filter(r => r.sub === chestSub.value);
+  if (cat.value === 'action' && subSel.value) list = list.filter(r => r.sub === subSel.value);
 
   const groupField = DIM[cat.value].group;
   const out: Sec[] = [];
@@ -221,13 +224,13 @@ const switchCat = (k: CatKey) => {
   if (cat.value === k) return;
   cat.value = k;
   railSel.value = '全部';
-  chestSub.value = '';
+  subSel.value = '';
   activeGroup.value = '';
 };
 
 const selectRail = (it: { key: string }) => {
   railSel.value = it.key;
-  chestSub.value = '';
+  subSel.value = '';
   if (searching.value) query.value = '';
   nextTick(() => {
     activeGroup.value = '';
@@ -236,7 +239,7 @@ const selectRail = (it: { key: string }) => {
 };
 
 const selectKid = (k: string) => {
-  chestSub.value = chestSub.value === k ? '' : k;
+  subSel.value = subSel.value === k ? '' : k;
   nextTick(measure);
 };
 
@@ -249,14 +252,14 @@ const clearQuery = () => {
 const askAI = () => {
   cat.value = 'ai';
   railSel.value = '全部';
-  chestSub.value = '';
+  subSel.value = '';
 };
 
 /** 空态：去别的 tab 接着搜 */
 const jumpCat = (k: CatKey) => {
   cat.value = k;
   railSel.value = '全部';
-  chestSub.value = '';
+  subSel.value = '';
 };
 
 const askOne = (t: string) => {
