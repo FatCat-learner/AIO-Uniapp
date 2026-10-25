@@ -7,8 +7,13 @@
           <text class="feat__n">{{ item.zh_name }}</text>
           <text class="feat__e">{{ item.equipment }}</text>
         </view>
-        <view class="feat__add" hover-class="u-hover" @tap.stop="emit('add', item)">
-          <AppIcon name="plus" :size="12" />
+        <view
+          class="feat__add"
+          :class="{ 'is-on': selectedIds.includes(item.id) }"
+          hover-class="u-hover"
+          @tap.stop="emit('toggle', item)"
+        >
+          <AppIcon set="app" :name="selectedIds.includes(item.id) ? 'check' : 'plus'" :size="12" />
         </view>
       </view>
     </view>
@@ -19,13 +24,14 @@
 /**
  * 选择动作 · 横滑精选卡
  * 取当前结果的前几张（列表已按 tab 的排序口径排好，不再另发请求）。
+ * 右下角圆钮 = 选中/取消，与双列卡共用同一份选中态。
  */
 import type { IExerciseBrief } from '@/api/exercise/types';
 import AppIcon from '@/components/base/AppIcon.vue';
 
-defineProps<{ items: IExerciseBrief[] }>();
+defineProps<{ items: IExerciseBrief[]; selectedIds: string[] }>();
 
-const emit = defineEmits<{ (e: 'add', item: IExerciseBrief): void }>();
+const emit = defineEmits<{ (e: 'toggle', item: IExerciseBrief): void }>();
 </script>
 
 <style lang="scss" scoped>
@@ -95,5 +101,10 @@ const emit = defineEmits<{ (e: 'add', item: IExerciseBrief): void }>();
   color: var(--brand-500);
   background-color: var(--brand-50);
   border-radius: var(--radius-full);
+}
+
+.feat__add.is-on {
+  color: var(--on-brand);
+  background-color: var(--brand-500);
 }
 </style>

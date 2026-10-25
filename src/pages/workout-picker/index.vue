@@ -44,7 +44,7 @@
 
           <view class="pk__content">
             <text class="pk__sec">{{ sectionLabel }}</text>
-            <PickerFeatured :items="featured" @add="onAdd" />
+            <PickerFeatured :items="featured" :selected-ids="selectedIds" @toggle="onToggle" />
 
             <template v-for="group in groups" :key="group.equipment">
               <text class="pk__grp">{{ group.equipment }}</text>
@@ -53,7 +53,8 @@
                   v-for="item in group.items"
                   :key="item.id"
                   :item="item"
-                  @add="onAdd"
+                  :selected="selectedIds.includes(item.id)"
+                  @toggle="onToggle"
                   @detail="onDetail"
                 />
               </view>
@@ -63,7 +64,9 @@
       </view>
     </view>
 
-    <PickerFooter @super-set="onStub('临时超级组')" @done="onClose" />
+    <PickerFooter :count="selected.length" @super-set="onSuperSet" @done="onDone" />
+
+    <SuperSetDialog v-model:visible="namingVisible" :default-value="namingDefault" @save="onSaveGroup" />
   </view>
 </template>
 
@@ -85,6 +88,7 @@ import PickerHeader from './components/PickerHeader.vue';
 import PickerRail from './components/PickerRail.vue';
 import PickerState from './components/PickerState.vue';
 import PickerTabs from './components/PickerTabs.vue';
+import SuperSetDialog from './components/SuperSetDialog.vue';
 
 interface EquipmentGroup {
   equipment: string;
@@ -184,8 +188,42 @@ function onSearch(value: string) {
   }, 300);
 }
 
-function onAdd(item: IExerciseBrief) {
-  uni.showToast({ title: `已加入：${item.zh_name}`, icon: 'none' });
+/** 已选动作（点卡切换，可多选） */
+const selected = ref<IExerciseBrief[]>([]);
+const selectedIds = computed(() => selected.value.map(item => item.id));
+const namingVisible = ref(false);
+const namingDefault = computed(() =>
+  selected.value.map(item => item.zh_name).join('+'),
+);
+
+function onToggle(item: IExerciseBrief) {
+  const index = selected.value.findIndex(row => row.id === item.id);
+  if (index >= 0) selected.value.splice(index, 1);
+  else selected.value.push(item);
+}
+
+/** 完成：把已选动作带回训练页（训练草稿 store 落地后改走它，这里先回退 + 提示） */
+function onDone() {
+  if (!selected.value.length) {
+    uni.showToast({ title: '先选动作', icon: 'none' });
+    return;
+  }
+  uni.showToast({ title: `已加入 ${selected.value.length} 个动作`, icon: 'none' });
+  setTimeout(() => uni.navigateBack(), 400);
+}
+
+/** 临时超级组：选满 2 个及以上才弹命名 */
+function onSuperSet() {
+  if (selected.value.length < 2) {
+    uni.showToast({ title: '至少选 2 个动作', icon: 'none' });
+    return;
+  }
+  namingVisible.value = true;
+}
+
+function onSaveGroup(name: string) {
+  uni.showToast({ title: `已建超级组：${name}`, icon: 'none' });
+  selected.value = [];
 }
 
 function onDetail(item: IExerciseBrief) {

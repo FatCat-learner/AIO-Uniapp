@@ -1,10 +1,10 @@
 <template>
   <view class="pk-foot">
     <view class="pk-foot__btn pk-foot__btn--ghost" hover-class="u-hover" @tap="emit('superSet')">
-      <text class="pk-foot__text">临时超级组</text>
+      <text class="pk-foot__text">临时超级组{{ count ? `(${count})` : '' }}</text>
     </view>
     <view class="pk-foot__btn pk-foot__btn--main" hover-class="u-hover" @tap="emit('done')">
-      <text class="pk-foot__text pk-foot__text--main">完成</text>
+      <text class="pk-foot__text pk-foot__text--main">完成{{ count ? `(${count})` : '' }}</text>
     </view>
   </view>
 </template>
@@ -12,8 +12,10 @@
 <script setup lang="ts">
 /**
  * 选择动作 · 底部固定条
- * 「临时超级组」本期只做点击态；「完成」= 把选择带回上一页（navigateBack）。
+ * 括号里是已选动作数：临时超级组(N) 把 N 个动作组队；完成(N) 直接把 N 个动作加进训练。
  */
+defineProps<{ count: number }>();
+
 const emit = defineEmits<{
   (e: 'superSet'): void;
   (e: 'done'): void;
@@ -55,10 +57,6 @@ const emit = defineEmits<{
   font-weight: 600;
   line-height: 1;
   color: var(--text-1);
-}
-
-.pk-foot__btn--ghost .pk-foot__text {
-  color: var(--text-2);
 }
 
 .pk-foot__text--main {

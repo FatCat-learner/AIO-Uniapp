@@ -97,8 +97,10 @@ function checkDesignSync() {
     if (!existsSync(html)) continue;
     files += 1;
     const src = readFileSync(html, 'utf8');
-    for (const m of src.matchAll(/<svg\b[^>]*\bdata-icon="([^"]+)"[^>]*>([\s\S]*?)<\/svg>/g)) {
-      const [, name, body] = m;
+    for (const m of src.matchAll(/<svg([^>]*)>([\s\S]*?)<\/svg>/g)) {
+      const name = m[1].match(/data-icon="([^"]+)"/)?.[1];
+      if (!name) continue;
+      const body = m[2];
       const file = join(ICON_DIR, `${name}.svg`);
       if (!existsSync(file)) {
         problems.push(`_design/previews/${dir.name}/index.html: data-icon="${name}" 没有对应的 src/static/icons/${name}.svg`);

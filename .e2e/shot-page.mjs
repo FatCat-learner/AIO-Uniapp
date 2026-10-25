@@ -47,8 +47,18 @@ function connect(wsUrl) {
   const ws = new WebSocket(wsUrl);
   let id = 0;
   const pending = new Map();
+  const logs = [];
   ws.addEventListener('message', (ev) => {
     const msg = JSON.parse(ev.data);
+    if (!msg.id && msg.method) {
+      if (msg.method === 'Runtime.exceptionThrown')
+        logs.push(`EXC ${msg.params?.exceptionDetails?.exception?.description ?? msg.params?.exceptionDetails?.text}`);
+      else if (msg.method === 'Runtime.consoleAPICalled')
+        logs.push(`${msg.params.type.toUpperCase()} ${(msg.params.args || []).map((a) => a.value ?? a.description).join(' ')}`);
+      else if (msg.method === 'Log.entryAdded')
+        logs.push(`${msg.params.entry.level.toUpperCase()} ${msg.params.entry.text}`);
+      return;
+    }
     if (msg.id && pending.has(msg.id)) {
       const { ok, bad } = pending.get(msg.id);
       pending.delete(msg.id);
@@ -62,7 +72,7 @@ function connect(wsUrl) {
       pending.set(mid, { ok, bad });
       ws.send(JSON.stringify({ id: mid, method, params }));
     });
-  return { ready, send, close: () => ws.close() };
+  return { ready, send, close: () => ws.close(), logs };
 }
 
 (async () => {
@@ -70,8 +80,12 @@ function connect(wsUrl) {
   const page = list.find((t) => t.type === 'page');
   if (!page) throw new Error('没有可用的 page target，先起一个 headless Chrome（--remote-debugging-port=9222）');
 
-  const { ready, send, close } = connect(page.webSocketDebuggerUrl);
+  const { ready, send, close, logs } = connect(page.webSocketDebuggerUrl);
   await ready;
+
+  /* 收集页面控制台与未捕获异常，便于排查「页面空白/没数据」这类问题 */
+  await send('Runtime.enable');
+  await send('Log.enable');
 
   await send('Emulation.setDeviceMetricsOverride', {
     width: 390,
@@ -95,8 +109,17 @@ function connect(wsUrl) {
   await send('Page.navigate', { url: `${BASE}${ROUTE}` });
   await sleep(WAIT);
 
+  const EVAL = arg('eval', '');
+  if (EVAL) {
+    const res = await send('Runtime.evaluate', { expression: EVAL, awaitPromise: true });
+    if (res.exceptionDetails) throw new Error(`--eval 出错：${JSON.stringify(res.exceptionDetails).slice(0, 200)}`);
+    if (res.result && res.result.value !== undefined) console.log('eval →', String(res.result.value).slice(0, 400));
+    await sleep(Number(arg('after', '900')));
+  }
+
   const { data: shot } = await send('Page.captureScreenshot', { format: 'png' });
   fs.writeFileSync(OUT, Buffer.from(shot, 'base64'));
+  if (flag('logs') && logs.length) console.log('--- 页面日志 ---\n' + logs.slice(-15).join('\n'));
   console.log('saved', OUT);
   close();
 })().catch((err) => {

@@ -36,22 +36,23 @@ const die = (msg) => {
 };
 
 const argOf = (k) => {
-  const hit = process.argv.find((a) => a.startsWith(`--${k}=`));
+  const hit = process.argv.find(a => a.startsWith(`--${k}=`));
   return hit ? hit.slice(k.length + 3) : '';
 };
 
-const innerOf = (svg) => svg.replace(/^[\s\S]*?<svg\b[^>]*>/, '').replace(/<\/svg>[\s\S]*$/, '');
+const innerOf = svg => svg.replace(/^[\s\S]*?<svg\b[^>]*>/, '').replace(/<\/svg>[\s\S]*$/, '');
 
 /** 归一化成项目规范 SVG；不满足前提就抛错（不做"强行改造"，改坏了不如不用） */
 function normalize(raw, label) {
   let inner = innerOf(raw);
   if (!inner.trim()) die(`${label}: 解析不出 <svg> 内容`);
 
-  if (/<g\b[^>]*\btransform\s*=/.test(inner)) {
+  const gTags = [...inner.matchAll(/<g([^>]*)>/g)];
+  if (gTags.some(([, attrs]) => /\btransform\s*=/.test(attrs))) {
     die(`${label}: 带 transform 的 <g> 分组（iconfont 导出的 1024 网格常见），无法安全转 24 网格。\n  换一个 24 网格 / 描边风格的图标，或用设计工具导出 24×24 的 SVG。`);
   }
-  // 只剥掉「不承载变换、只承载样式」的 <g> 包裹
-  inner = inner.replace(/<g\b(?![^>]*\btransform=)[^>]*>/g, '').replace(/<\/g>/g, '');
+  // 上面的 transform 分组已被拒绝，剩下的 <g> 只是样式包裹，直接剥掉
+  inner = inner.replace(/<g([^>]*)>/g, '').replace(/<\/g>/g, '');
   inner = inner.replace(/<!--[\s\S]*?-->/g, '').replace(/<title\b[\s\S]*?<\/title>/g, '');
   inner = inner.replace(/<defs\b[\s\S]*?<\/defs>/g, '');
 
@@ -91,12 +92,12 @@ function readRegistry() {
   const src = readFileSync(REGISTRY, 'utf8');
   const block = src.match(/APP_ICONS\s*=\s*\[([\s\S]*?)\]/);
   if (!block) die(`找不到 APP_ICONS：${REGISTRY}`);
-  const names = [...block[1].matchAll(/['"]([^'"]+)['"]/g)].map((m) => m[1]);
+  const names = [...block[1].matchAll(/['"]([^'"]+)['"]/g)].map(m => m[1]);
   return { src, names };
 }
 
 function writeRegistry(src, names) {
-  const next = `export const APP_ICONS = [\n${names.map((n) => `  '${n}',`).join('\n')}\n] as const;`;
+  const next = `export const APP_ICONS = [\n${names.map(n => `  '${n}',`).join('\n')}\n] as const;`;
   writeFileSync(REGISTRY, src.replace(/export const APP_ICONS\s*=\s*\[[\s\S]*?\] as const;/, next));
 }
 
@@ -104,7 +105,8 @@ function run(cmd, args) {
   try {
     execFileSync(cmd, args, { cwd: APP, stdio: 'pipe' });
     return { ok: true };
-  } catch (e) {
+  }
+  catch (e) {
     return { ok: false, out: `${e.stdout ?? ''}${e.stderr ?? ''}`.trim() };
   }
 }
@@ -112,7 +114,7 @@ function run(cmd, args) {
 async function main() {
   const from = argOf('from');
   const explicitName = argOf('name');
-  const positional = process.argv.slice(2).filter((a) => !a.startsWith('--'));
+  const positional = process.argv.slice(2).filter(a => !a.startsWith('--'));
   const ids = positional.length ? positional : from ? [] : [];
 
   if (!from && !ids.length) {
@@ -127,7 +129,8 @@ async function main() {
     if (!existsSync(p)) die(`找不到文件：${p}`);
     const name = explicitName || p.split(/[\\/]/).pop().replace(/\.svg$/i, '');
     jobs.push({ name, raw: readFileSync(p, 'utf8'), label: p });
-  } else {
+  }
+  else {
     for (const id of ids) {
       const got = await fetchIconify(id);
       jobs.push({ name: id.includes(':') ? id.split(':').pop() : id, raw: got.body, label: got.label, wrap: true });
@@ -161,7 +164,8 @@ async function main() {
   try {
     execFileSync(process.execPath, [join(ROOT, '_design/gen-icon-wall.mjs')], { stdio: 'pipe' });
     console.log('✓ 图标墙已刷新 _design/previews/icon-set/index.html');
-  } catch {
+  }
+  catch {
     console.log('· 图标墙刷新失败（不影响入库），手动跑 node _design/gen-icon-wall.mjs');
   }
   console.log(`\n新增 ${added.length} 个：${added.join(', ')}`);

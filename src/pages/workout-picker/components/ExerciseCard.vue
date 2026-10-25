@@ -1,7 +1,5 @@
 <template>
-  <view class="card">
-    <text class="card__badge">讲解</text>
-
+  <view class="card" :class="{ 'is-on': selected }" hover-class="u-hover" @tap="emit('toggle', item)">
     <view class="card__shot">
       <image
         v-if="!imgFailed"
@@ -13,14 +11,15 @@
       <view v-else class="card__ph">
         <AppIcon set="app" name="dumbbell" :size="22" color="var(--text-4)" />
       </view>
+
+      <view v-if="selected" class="card__check">
+        <AppIcon set="app" name="check" :size="12" color="var(--on-brand)" />
+      </view>
     </view>
 
     <text class="card__name">{{ item.zh_name }}</text>
 
-    <view class="card__btn card__btn--add" hover-class="u-hover" @tap="emit('add', item)">
-      <text class="card__btn-text card__btn-text--add">加入训练</text>
-    </view>
-    <view class="card__btn" hover-class="u-hover" @tap="emit('detail', item)">
+    <view class="card__btn" hover-class="u-hover" @tap.stop="emit('detail', item)">
       <text class="card__btn-text">查看动作要点</text>
     </view>
   </view>
@@ -28,18 +27,19 @@
 
 <script setup lang="ts">
 /**
- * 选择动作 · 双列动作卡
- * 左上「讲解」角标 + 缩略图 + 名称 + 主/次两个按钮。
- * 「N 次」角标已省略：列表接口（ExerciseBrief）不返回 use_count，不编造数字。
+ * 选择动作 · 双列动作卡（可多选）
+ * 点整卡 = 选中/取消；「查看动作要点」单独走详情。
+ * 已按需求去掉「加入训练」按钮与「讲解」角标（角标只在详情页、且该动作有视频时才显示）。
+ * 「N 次」角标：列表接口（ExerciseBrief）不返回 use_count，不编造数字。
  */
 import type { IExerciseBrief } from '@/api/exercise/types';
 import { ref } from 'vue';
 import AppIcon from '@/components/base/AppIcon.vue';
 
-defineProps<{ item: IExerciseBrief }>();
+defineProps<{ item: IExerciseBrief; selected: boolean }>();
 
 const emit = defineEmits<{
-  (e: 'add', item: IExerciseBrief): void;
+  (e: 'toggle', item: IExerciseBrief): void;
   (e: 'detail', item: IExerciseBrief): void;
 }>();
 
@@ -49,7 +49,6 @@ const imgFailed = ref(false);
 
 <style lang="scss" scoped>
 .card {
-  position: relative;
   display: flex;
   flex-direction: column;
   gap: var(--sp-2);
@@ -59,29 +58,16 @@ const imgFailed = ref(false);
   border-radius: var(--radius-md);
 }
 
-.card__badge {
-  position: absolute;
-  top: var(--sp-2);
-  left: var(--sp-2);
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  height: 18px;
-  padding: 0 var(--sp-1);
-  font-size: var(--fs-3xs);
-  font-weight: 600;
-  line-height: 1;
-  color: var(--on-brand);
-  background-color: var(--brand-500);
-  border-radius: var(--radius-xs);
+.card.is-on {
+  background-color: var(--brand-a10);
+  border-color: var(--brand-500);
 }
 
 .card__shot {
   position: relative;
   width: 100%;
-  /* 图片框定高比：uni-image 的内联宽高不吃 aspect-ratio，必须给容器定 */
-  aspect-ratio: 4 / 3;
-  margin-top: var(--sp-2);
+  /* 正方形：uni-image 的内联宽高不吃 aspect-ratio，必须给容器定 */
+  aspect-ratio: 1 / 1;
   overflow: hidden;
   background-color: var(--fill);
   border-radius: var(--radius-xs);
@@ -97,6 +83,19 @@ const imgFailed = ref(false);
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.card__check {
+  position: absolute;
+  top: var(--sp-1);
+  right: var(--sp-1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background-color: var(--brand-500);
+  border-radius: var(--radius-full);
 }
 
 .card__name {
@@ -116,18 +115,9 @@ const imgFailed = ref(false);
   border-radius: var(--radius-full);
 }
 
-.card__btn--add {
-  background-color: var(--brand-500);
-}
-
 .card__btn-text {
   font-size: var(--fs-xs);
   line-height: 1;
   color: var(--text-2);
-}
-
-.card__btn-text--add {
-  font-weight: 600;
-  color: var(--on-brand);
 }
 </style>
