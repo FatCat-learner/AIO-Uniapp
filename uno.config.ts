@@ -3,6 +3,7 @@ import { FileSystemIconLoader } from '@iconify/utils/lib/loader/node-loaders';
 import { presetUni } from '@uni-helper/unocss-preset-uni';
 import { presetLegacyCompat } from '@unocss/preset-legacy-compat';
 import { defineConfig, presetIcons, transformerDirectives, transformerVariantGroup } from 'unocss';
+import { APP_ICONS } from './src/components/base/icons';
 
 export default defineConfig({
   presets: [
@@ -22,12 +23,9 @@ export default defineConfig({
       },
       // 自定义图标
       collections: {
-        // 从本地文件系统加载 svg 图标
-        'my-icons': FileSystemIconLoader('./src/static/icons'),
-        // 从在线图标库加载图标
-        // 'my-online-icons': async (iconName) => {
-        //   return await fetch(`https://example.com/icons/${iconName}.svg`).then(res => res.text());
-        // },
+        // 本地 svg 集合（素材来自 iconfont / 同风格线性图标，规范见 _design/SPEC.md）
+        // 类名 i-app-<name>；登记表 src/components/base/icons.ts，准入校验 pnpm icons:check
+        app: FileSystemIconLoader('./src/static/icons'),
       },
     }),
     /**
@@ -40,8 +38,8 @@ export default defineConfig({
     }) as Preset,
   ],
   /**
-   * AppIcon 组件是「i-mdi-${name}」动态拼类名，扫描器看不见，
-   * 所以所有用到的 mdi 图标必须在这里登记（新增图标时同步加一行）。
+   * AppIcon 组件是「i-${set}-${name}」动态拼类名，扫描器看不见，
+   * 所以所有用到的图标必须在这里登记（新增图标时同步加一行）。
    * 对应规范 §3.5：底部 5 Tab + 训练按钮 + 常用操作图标。
    */
   safelist: [
@@ -133,6 +131,8 @@ export default defineConfig({
     'i-mdi-chart-line',
     'i-mdi-cog-outline',
     'i-mdi-yoga',
+    // 本地图标集（src/static/icons，登记表 src/components/base/icons.ts）
+    ...APP_ICONS.map(name => `i-app-${name}`),
   ],
   /**
    * 自定义快捷语句
