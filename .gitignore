@@ -28,5 +28,5 @@ unpackage
 coverage
 *.timestamp-*.mjs
 
-# E2E 截图与临时脚本（产物，不入库）
-.e2e/
+# E2E 截图是跑出来的产物，不入库；.mjs 驱动脚本要留档
+.e2e/*.png
