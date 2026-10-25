@@ -13,6 +13,12 @@ export const createViteProxy = (env: Record<string, string>) => {
       target: VITE_API_BASE_URL,
       changeOrigin: true,
     },
+    // 动作库的 GIF / 缩略图在 /static 下（后端的 StaticFiles，不走 /api），
+    // 不代理的话 H5 dev 里动作图全是 404
+    '/static': {
+      target: VITE_API_BASE_URL,
+      changeOrigin: true,
+    },
   };
   return proxy;
 };

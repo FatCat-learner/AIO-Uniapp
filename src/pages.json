@@ -1,6 +1,9 @@
 {
   "easycom": {
-    "autoscan": true
+    "autoscan": true,
+    "custom": {
+      "^z-paging(-.*)?$": "z-paging/components/z-paging/z-paging.vue"
+    }
   },
   "pages": [
     {
@@ -96,6 +99,14 @@
         "app-plus": {
           "bounce": "none"
         }
+      }
+    },
+    {
+      "path": "pages/workout-picker/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "选择动作",
+        "enablePullDownRefresh": false
       }
     }
   ],

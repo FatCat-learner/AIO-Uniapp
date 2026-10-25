@@ -77,6 +77,44 @@ function inspect(name, svg) {
   return issues;
 }
 
+/**
+ * 设计稿同源校验：`_design/previews/<slug>/index.html` 里写成
+ *   <svg data-icon="dumbbell" ...>图形</svg>
+ * 的地方，图形必须与 `src/static/icons/dumbbell.svg` 逐字一致（空白归一后）。
+ * 这样设计稿和 App 才会一直用同一批 SVG，不会各画一套。
+ */
+function checkDesignSync() {
+  const designDir = join(ROOT, '..', '_design', 'previews');
+  if (!existsSync(designDir)) return { files: 0, problems: [] };
+
+  const problems = [];
+  let files = 0;
+  const flat = s => s.replace(/\s+/g, ' ').trim();
+
+  for (const dir of readdirSync(designDir, { withFileTypes: true })) {
+    if (!dir.isDirectory()) continue;
+    const html = join(designDir, dir.name, 'index.html');
+    if (!existsSync(html)) continue;
+    files += 1;
+    const src = readFileSync(html, 'utf8');
+    for (const m of src.matchAll(/<svg\b[^>]*\bdata-icon="([^"]+)"[^>]*>([\s\S]*?)<\/svg>/g)) {
+      const [, name, body] = m;
+      const file = join(ICON_DIR, `${name}.svg`);
+      if (!existsSync(file)) {
+        problems.push(`_design/previews/${dir.name}/index.html: data-icon="${name}" 没有对应的 src/static/icons/${name}.svg`);
+        continue;
+      }
+      const local = readFileSync(file, 'utf8')
+        .replace(/^[\s\S]*?<svg\b[^>]*>/, '')
+        .replace(/<\/svg>[\s\S]*$/, '');
+      if (flat(local) !== flat(body)) {
+        problems.push(`_design/previews/${dir.name}/index.html: data-icon="${name}" 的图形与 src/static/icons/${name}.svg 不一致（设计稿被手改过？重跑同步脚本）`);
+      }
+    }
+  }
+  return { files, problems };
+}
+
 function main() {
   const listOnly = process.argv.includes('--list');
   if (!existsSync(ICON_DIR)) {
@@ -116,11 +154,18 @@ function main() {
     console.log(`✖ 登记了但没有对应 svg 文件：${missingFile.join(', ')}`);
   }
 
+  const design = checkDesignSync();
+  if (design.problems.length) {
+    failed += design.problems.length;
+    for (const p of design.problems) console.log(`✖ ${p}`);
+  }
+
   if (failed) {
     console.log(`\n✖ ${failed} 处不合格`);
     process.exit(1);
   }
   console.log(`✓ ${names.length} 个本地图标全部合格，且与 icons.ts 登记表一致`);
+  if (design.files) console.log(`✓ 设计稿同源校验通过（扫描 ${design.files} 个 preview）`);
 }
 
 main();
