@@ -1,0 +1,141 @@
+// discover 页样式：list
+.main {
+  box-sizing: border-box;
+  flex: 1;
+  min-width: 0;
+  padding: 0 22px 96px 12px;
+}
+
+.sec__hd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0 8px;
+}
+
+.sec__t {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-1);
+}
+
+.sec__n {
+  font-size: 11px;
+  color: var(--text-2);
+}
+
+.sec__more {
+  font-size: 11px;
+  color: var(--acc);
+}
+
+.tail {
+  padding: 18px 0 10px;
+  font-size: 11px;
+  color: var(--text-3);
+  text-align: center;
+}
+
+/* ---------- 行 ---------- */
+.row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  min-height: 58px;
+  padding: 6px 9px;
+  margin-bottom: 8px;
+  background-color: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+}
+
+.row__ic {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  background-color: var(--acc-soft);
+  border-radius: var(--radius-sm);
+}
+
+.row__ic--sm {
+  width: 28px;
+  height: 28px;
+}
+
+.row__txt {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.row__t {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-1);
+}
+
+.row__m {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 11px;
+  color: var(--text-2);
+  white-space: nowrap;
+}
+
+.row__x {
+  flex: none;
+  font-size: 11px;
+  color: var(--text-2);
+}
+
+.row__kcal {
+  flex: none;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-1);
+}
+
+.row__u {
+  margin-left: 2px;
+  font-size: 9px;
+  font-weight: 400;
+  color: var(--text-2);
+}
+
+/* ---------- 收藏按钮 ---------- */
+.fav {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background-color: var(--fill);
+  border-radius: var(--radius-full);
+}
+
+.fav.is-on {
+  background-color: var(--acc);
+}
+
+.fav__i {
+  font-size: 14px;
+  line-height: 14px;
+  color: var(--text-2);
+}
+
+.fav.is-on .fav__i {
+  color: #0b0d12;
+}
+
+.fav--abs {
+  position: absolute;
+  top: 100px;
+  right: 10px;
+}
+

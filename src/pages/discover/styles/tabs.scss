@@ -1,0 +1,42 @@
+// discover 页样式：tabs
+.tabs {
+  display: flex;
+  flex: none;
+  gap: 22px;
+  align-items: flex-end;
+  padding: 24px 16px 0;
+}
+
+.tab {
+  position: relative;
+  padding-bottom: 9px;
+}
+
+.tab--hover {
+  opacity: 0.6;
+}
+
+.tab__t {
+  font-size: 15px;
+  color: var(--text-2);
+}
+
+.tab.is-on .tab__t {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-1);
+}
+
+.tab__bar {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background-color: transparent;
+  border-radius: 3px;
+}
+
+.tab.is-on .tab__bar {
+  background-color: var(--brand-500);
+}

@@ -1,0 +1,46 @@
+// discover 页样式：searchbar
+/* ---------- 搜索条 ---------- */
+.bar-wrap {
+  flex: none;
+  padding: 14px 16px;
+}
+
+.bar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  height: 44px;
+  padding: 0 12px;
+  background-color: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-full);
+}
+
+.bar__in {
+  flex: 1;
+  height: 44px;
+  font-size: 14px;
+  color: var(--text-1);
+}
+
+.bar__x {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.bar__cam {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  background-color: var(--acc-soft);
+  border-radius: var(--radius-full);
+}
+
+.u-hover {
+  opacity: 0.65;
+}

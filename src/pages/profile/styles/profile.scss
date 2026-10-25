@@ -1,0 +1,157 @@
+// profile（我的 tab）页面样式：资料块 / 身体三指标 / 设置组 / 偏好组 / 退出登录
+.mb-20 {
+  margin-bottom: 20px;
+}
+
+.profile {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  padding: 8px 0 20px;
+}
+
+.profile__avatar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  margin-bottom: 8px;
+  background-color: var(--surface-2);
+  border: 2px solid var(--brand-500);
+  border-radius: var(--radius-full);
+}
+
+.profile__initial {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--text-1);
+}
+
+.profile__edit {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  color: var(--on-brand);
+  background-color: var(--brand-500);
+  border: 2px solid var(--bg);
+  border-radius: var(--radius-full);
+}
+
+.profile__name {
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 24px;
+  color: var(--text-1);
+}
+
+.profile__meta {
+  font-size: 11px;
+  line-height: 16px;
+  color: var(--text-2);
+}
+
+.metrics {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.metrics__card {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  align-items: center;
+  padding: 12px 8px;
+}
+
+.metrics__label {
+  font-size: 11px;
+  line-height: 16px;
+  color: var(--text-2);
+}
+
+.metrics__value-row {
+  display: flex;
+  gap: 2px;
+  align-items: baseline;
+}
+
+.metrics__value {
+  font-size: 20px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 26px;
+  color: var(--text-1);
+}
+
+.metrics__value.is-brand {
+  color: var(--brand-500);
+}
+
+.metrics__unit {
+  font-size: 11px;
+  color: var(--text-3);
+}
+
+.group-title {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 16px;
+  color: var(--text-2);
+  letter-spacing: 0.08em;
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  height: 56px;
+  padding: 0 16px;
+}
+
+.row--divided {
+  border-top: 1px solid var(--line);
+}
+
+.row__title {
+  flex: 1;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 22px;
+  color: var(--text-1);
+}
+
+.row__extra {
+  font-size: 11px;
+  color: var(--text-3);
+}
+
+.row__arrow {
+  color: var(--text-3);
+}
+
+.logout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logout__text {
+  display: block;
+  padding: 14px 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--danger);
+  text-align: center;
+}

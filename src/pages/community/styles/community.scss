@@ -1,0 +1,51 @@
+// community（社区 tab）页面样式：建设中空态
+.empty {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  padding: 96px 24px 0;
+  text-align: center;
+}
+
+.empty__icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 96px;
+  height: 96px;
+  margin-bottom: 8px;
+  color: var(--brand-500);
+  background-color: var(--brand-50);
+  border-radius: var(--radius-full);
+}
+
+.empty__title {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 22px;
+  color: var(--text-1);
+}
+
+.empty__desc {
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--text-2);
+}
+
+.empty__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  padding: 0 20px;
+  margin-top: 12px;
+  background-color: var(--fill);
+  border-radius: var(--radius-full);
+}
+
+.empty__btn-text {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-1);
+}

@@ -23,13 +23,13 @@
         <text class="welcome__legal-text">
           继续即表示同意
         </text>
-        <text class="welcome__link" @tap="openTerms('服务条款')">
+        <text class="welcome__link" @tap="openTerms(WELCOME_COPY.serviceTerms)">
           服务条款
         </text>
         <text class="welcome__legal-text">
           与
         </text>
-        <text class="welcome__link" @tap="openTerms('隐私政策')">
+        <text class="welcome__link" @tap="openTerms(WELCOME_COPY.privacyTerms)">
           隐私政策
         </text>
       </view>
@@ -41,99 +41,24 @@
 /**
  * 首屏 Welcome（§16.1 P1）
  * 只有「开始使用」一个出口：点进登录页，不再有「已有账号」这种重复入口。
+ * 纯静态引导页：无共享状态、无接口，故不建 store / api（出口路由与条款文案在 config/）。
  */
 import AuthButton from '@/components/auth/AuthButton.vue';
 import AuthGlow from '@/components/auth/AuthGlow.vue';
 import AuthLogo from '@/components/auth/AuthLogo.vue';
+import { toast } from '@/utils/ui';
+import { WELCOME_COPY } from './config';
 
 function start() {
-  uni.navigateTo({ url: '/pages/login/index' });
+  uni.navigateTo({ url: WELCOME_COPY.loginPath });
 }
 
 /** 条款页还没做，先用 toast 兜住点击（不让用户点了没反应） */
 function openTerms(name: string) {
-  uni.showToast({ title: `${name}（待接入）`, icon: 'none' });
+  toast(`${name}${WELCOME_COPY.termsPendingSuffix}`);
 }
 </script>
 
 <style lang="scss" scoped>
-.welcome {
-  position: relative;
-  display: flex;
-  box-sizing: border-box;
-  flex-direction: column;
-  width: 100%;
-  height: 100vh;
-  padding: 10px var(--sp-4) 28px;
-  overflow: hidden;
-  background: var(--bg);
-}
-
-.welcome__page{
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  justify-content: center;
-  position: relative;
-  z-index: 1;
-}
-
-.welcome__logo {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 36px;
-}
-
-.welcome__copy {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.welcome__title {
-  font-size: 28px;
-  font-weight: 700;
-  line-height: 1.3;
-  color: var(--text-1);
-}
-
-.welcome__desc {
-  margin-top: 14px;
-  font-size: var(--fs-sm);
-  line-height: var(--lh-normal);
-  text-align: center;
-  color: var(--text-2);
-  width: 180px;
-}
-
-.welcome__foot {
-  flex: none;
-  /* 设计稿：.welcome__foot{padding:0 24px 30px}，页面本身不再重复留边 */
-  padding: 0 8px 2px;
-}
-
-.welcome__legal {
-  display: flex;
-  align-items: baseline;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 0 4px;
-  margin-top: 16px;
-  font-size: var(--fs-xs);
-  line-height: 1.65;
-  color: #8b94a3;
-}
-
-.welcome__legal-text {
-  font-size: var(--fs-xs);
-  color: #8b94a3;
-}
-
-/* 设计稿 .legal a：浅灰字 + 1px 下划线，压住「可点」但不抢主按钮 */
-.welcome__link {
-  font-size: var(--fs-xs);
-  color: #b9c2d0;
-  border-bottom: 1px solid var(--line-strong);
-  padding-bottom: 1px;
-}
+@import './styles/welcome.scss';
 </style>

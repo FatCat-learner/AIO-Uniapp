@@ -1,0 +1,10 @@
+.form__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.form__link {
+  font-size: var(--fs-xs);
+  color: var(--text-2);
+}

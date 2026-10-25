@@ -1,0 +1,21 @@
+// index（首页 tab）页面样式：卡片流骨架
+.scroll {
+  flex: 1;
+  min-height: 0;
+}
+
+/* 卡片流：统一 12 间距，底部预留 Dock（108） */
+.home {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--card-gap);
+  padding: 24px var(--page-x) var(--content-inset-bottom);
+}
+
+.tail {
+  padding: var(--sp-3) 0 var(--sp-2);
+  font-size: 11px;
+  color: var(--text-3);
+  text-align: center;
+}

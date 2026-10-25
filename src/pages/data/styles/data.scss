@@ -1,0 +1,162 @@
+// data（数据 tab）页面样式：分段控件 → 周汇总 → 柱状图 → 空态
+.mb-12 {
+  margin-bottom: 12px;
+}
+
+/* 分段控件 §4.9：轨道 fill、选中绿实底 + on-brand 字 */
+.seg {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  height: 40px;
+  padding: 4px;
+  margin-bottom: 12px;
+  background-color: var(--fill);
+  border-radius: var(--radius-full);
+}
+
+.seg__item {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  border-radius: var(--radius-full);
+  transition: background-color 0.18s ease;
+}
+
+.seg__item.is-active {
+  background-color: var(--brand-500);
+}
+
+.seg__text {
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 20px;
+  color: var(--text-2);
+}
+
+.seg__item.is-active .seg__text {
+  font-weight: 600;
+  color: var(--on-brand);
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 22px;
+  color: var(--text-1);
+}
+
+.card-more {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  color: var(--brand-500);
+}
+
+.card-more__text {
+  font-size: 11px;
+  line-height: 16px;
+}
+
+.weekly {
+  display: flex;
+}
+
+.weekly__item {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.weekly__value {
+  font-size: 24px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 30px;
+  color: var(--text-1);
+}
+
+.weekly__value.is-brand {
+  color: var(--brand-500);
+}
+
+.weekly__label {
+  font-size: 11px;
+  line-height: 16px;
+  color: var(--text-3);
+}
+
+/* 柱状：卡内均分、圆角 8、最后一天实心绿 */
+.chart {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  height: 96px;
+  margin-top: 16px;
+}
+
+.chart__bar-wrap {
+  display: flex;
+  flex: 1;
+  align-items: flex-end;
+  height: 100%;
+}
+
+.chart__bar {
+  width: 100%;
+  background-color: var(--surface-2);
+  border-radius: 8px;
+}
+
+.chart__bar.is-last {
+  background-color: var(--brand-500);
+}
+
+.chart__axis {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.chart__axis-label {
+  flex: 1;
+  font-size: 11px;
+  color: var(--text-3);
+  text-align: center;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  padding: 32px 16px;
+  text-align: center;
+}
+
+.empty__icon {
+  color: var(--text-3);
+}
+
+.empty__title {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 22px;
+  color: var(--text-1);
+}
+
+.empty__desc {
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--text-2);
+}

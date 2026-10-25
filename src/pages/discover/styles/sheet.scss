@@ -1,0 +1,144 @@
+// discover 页样式：sheet
+/* ---------- 拍照面板 ---------- */
+.mask {
+  position: absolute;
+  inset: 0;
+  z-index: 110;
+  background-color: rgb(6 8 12 / 62%);
+}
+
+.sheet {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 111;
+  padding: 10px 16px 22px;
+  background-color: var(--surface-2);
+  border-top: 1px solid var(--line-strong);
+  border-radius: 24px 24px 0 0;
+}
+
+.sheet__grip {
+  width: 46px;
+  height: 4px;
+  margin: 0 auto 10px;
+  background-color: var(--line-strong);
+  border-radius: 4px;
+}
+
+.sheet__t {
+  display: block;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-1);
+  text-align: center;
+}
+
+.sheet__s {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  color: var(--text-2);
+  text-align: center;
+}
+
+.frame {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  height: 150px;
+  margin: 12px 0;
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-md);
+}
+
+.frame__t {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-1);
+}
+
+.frame__d {
+  font-size: 11px;
+  color: var(--text-2);
+}
+
+.result {
+  padding: 10px;
+  margin: 12px 0;
+  background-color: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+}
+
+.result__hd {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  padding-bottom: 8px;
+}
+
+.result__hd-t {
+  font-size: 11px;
+  color: var(--text-2);
+}
+
+.result__row {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  height: 48px;
+}
+
+.result__n {
+  flex: 1;
+  font-size: 13px;
+  color: var(--text-1);
+}
+
+.result__k {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-1);
+}
+
+.sheet__btns {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.btn {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  height: 46px;
+  border-radius: var(--radius-full);
+}
+
+.btn--ghost {
+  color: var(--text-1);
+  background-color: var(--fill);
+}
+
+.btn--main {
+  font-weight: 700;
+  color: #0b0d12;
+  background-color: var(--mod-diet);
+}
+
+.btn text {
+  font-size: 14px;
+}
+
+.btn--ghost text {
+  color: var(--text-1);
+}
+
+.btn--main text {
+  color: #0b0d12;
+}
