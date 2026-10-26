@@ -1,0 +1,98 @@
+/* 训练页（workout）骨架
+ * 只有布局：顶部头部与底栏各自带着自己的样式走（components/*.vue）。
+ * 取值全部来自 theme.scss 令牌；尺寸对齐设计稿 ①② 屏。
+ */
+.wk {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: var(--bg);
+}
+
+/* nav='none' 自绘头部：自己让出状态栏高度 */
+.wk__status {
+  flex: none;
+  height: var(--status-bar-height, 0);
+}
+
+/* 圆角面板：动作卡都在里面滚 */
+.wk__sheet {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--card-gap);
+  min-height: 0;
+  background-color: var(--surface);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+}
+
+/* scroll-view 的内容层：内边距放这里，否则内容层宽度会把右侧 padding 吃掉 */
+.wk__list {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--card-gap);
+  width: 100%;
+  padding: var(--sp-4);
+}
+
+/* 空态（设计稿 ① 屏） */
+.empty {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  align-items: center;
+  width: 100%;
+  padding: var(--sp-6) var(--sp-4);
+  text-align: center;
+  border: 1px dashed var(--line-dashed);
+  border-radius: var(--radius-lg);
+}
+
+.empty__ico {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 42px;
+  color: var(--text-3);
+  background-color: var(--fill);
+  border-radius: var(--radius-sm);
+}
+
+.empty__t {
+  font-size: var(--fs-body);
+  color: var(--text-2);
+}
+
+.empty__s {
+  font-size: var(--fs-xs);
+  line-height: var(--lh-normal);
+  color: var(--text-3);
+}
+
+.empty__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  justify-content: center;
+  margin-top: var(--sp-2);
+}
+
+.chip-s {
+  display: flex;
+  gap: var(--sp-1);
+  align-items: center;
+  height: var(--pill-h);
+  padding: 0 var(--sp-3);
+  font-size: var(--fs-xs);
+  color: var(--text-2);
+  background-color: var(--fill);
+  border-radius: var(--radius-full);
+}
+
+.chip-s__b {
+  font-weight: 600;
+  color: var(--brand-500);
+}

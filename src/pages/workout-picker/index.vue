@@ -80,6 +80,7 @@ import type { IExerciseBrief } from '@/api/exercise/types';
 import { computed, nextTick, onMounted, ref } from 'vue';
 import { MUSCLE_TREE } from '@/pages/discover/config/muscle-tree';
 import useExerciseStore from '@/store/exercise';
+import useWorkoutStore from '@/store/workout';
 import ExerciseCard from './components/ExerciseCard.vue';
 import PickerChips from './components/PickerChips.vue';
 import PickerFeatured from './components/PickerFeatured.vue';
@@ -96,6 +97,8 @@ interface EquipmentGroup {
 }
 
 const store = useExerciseStore();
+/** 训练草稿：选完动作写进来，训练页读它 */
+const workout = useWorkoutStore();
 
 /** z-paging 的列表；分页数据由 onQuery 写回 */
 const list = ref<IExerciseBrief[]>([]);
@@ -202,12 +205,13 @@ function onToggle(item: IExerciseBrief) {
   else selected.value.push(item);
 }
 
-/** 完成：把已选动作带回训练页（训练草稿 store 落地后改走它，这里先回退 + 提示） */
+/** 完成：把已选动作写进训练草稿，再退回训练页 */
 function onDone() {
   if (!selected.value.length) {
     uni.showToast({ title: '先选动作', icon: 'none' });
     return;
   }
+  workout.addExercises(selected.value);
   uni.showToast({ title: `已加入 ${selected.value.length} 个动作`, icon: 'none' });
   setTimeout(() => uni.navigateBack(), 400);
 }

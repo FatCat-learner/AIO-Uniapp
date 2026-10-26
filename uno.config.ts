@@ -94,6 +94,7 @@ export default defineConfig({
     'i-mdi-magnify',
     'i-mdi-pencil',
     'i-mdi-play',
+    'i-mdi-pause',
     'i-mdi-close',
     // 模块（力量 / 有氧 / 饮食 / 身体 / 睡眠）
     'i-mdi-lightning-bolt',
