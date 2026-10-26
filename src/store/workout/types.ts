@@ -9,6 +9,9 @@ import type { IExerciseBrief } from '@/api/exercise/types';
 /** 组难度三选（产品口径：不做 RPE，只记简单 / 正常 / 困难） */
 export type SetDifficulty = 'easy' | 'mid' | 'hard';
 
+/** 训练类型：首页 7 项面板里会直接开一次训练的前四项 */
+export type WorkoutKind = 'strength' | 'cardio' | 'hiit' | 'ball';
+
 /** 一组 */
 export interface IWorkoutSet {
   /** 会话内唯一，v-for key 用它 */
@@ -37,6 +40,8 @@ export interface IWorkoutExercise {
 export interface IWorkoutState {
   /** 草稿是否在用：有动作或已经开始都算 */
   active: boolean;
+  /** 这次训练的类型，null 表示还没选（标题也就没有默认值） */
+  kind: WorkoutKind | null;
   /** 训练标题，空串显示占位文案 */
   title: string;
   /** 开始计时的时间戳（ms），0 表示还没点播放 */

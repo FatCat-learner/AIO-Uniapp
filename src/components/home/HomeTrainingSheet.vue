@@ -1,48 +1,44 @@
 <template>
-  <view v-if="open" class="mask" @tap="emit('close')" />
-  <view v-if="open" class="sheet" @tap.stop>
-    <view class="sheet__grip" />
-
-    <view class="sheet__hd">
-      <text class="sheet__t">
-        开始训练
-      </text>
-      <view class="sheet__x" hover-class="u-hover" :hover-stay-time="80" @tap="emit('close')">
-        <AppIcon name="close" :size="18" />
-      </view>
-    </view>
-
-    <view class="sheet__grid">
+  <AppSheet :visible="open" height="auto" title="开始训练" :z-index="120" @close="emit('close')">
+    <view class="grid">
       <view
-        v-for="a in actions"
-        :key="a.label"
-        class="qk"
+        v-for="a in ACTIONS"
+        :key="a.key"
+        class="cell"
+        :class="{ 'is-soon': a.soon }"
         hover-class="u-hover"
         :hover-stay-time="80"
-        @tap="emit('action', a.label)"
+        @tap="emit('pick', a.key)"
       >
-        <view class="qk__ic">
-          <AppIcon :name="a.icon" :size="20" />
+        <view class="cell__ic">
+          <AppIcon :name="a.icon" :set="a.set" :size="20" />
         </view>
-        <text class="qk__t">
-          {{ a.label }}
-        </text>
+        <text class="cell__t">{{ a.label }}</text>
+        <text v-if="a.soon" class="cell__s">即将开放</text>
       </view>
     </view>
-
-    <view class="sheet__btn" hover-class="u-hover" :hover-stay-time="80" @tap="emit('action', '开始自由训练')">
-      <text>开始自由训练</text>
-    </view>
-  </view>
+  </AppSheet>
 </template>
 
 <script setup lang="ts">
 /**
- * HomeTrainingSheet · 训练启动面板（FAB 展开，UI 规范 V1.1 §4.18 BottomSheet）
- * 4 个快捷入口 + 「开始自由训练」主按钮；面板本身只是训练流程的入口，
- * 具体训练面板（练胸 / 练腿 / 有氧 / 拉伸）后续接入。
+ * HomeTrainingSheet · 训练启动面板（设计稿 home-v3 第 3 帧）
+ *
+ * 7 项面板：力量 / 有氧 / HIIT / 球类（占位「即将开放」）/ 身体数据 / 经期记录 / AI 教练。
+ * 4+3 两排，前四项开训练 sheet，后三项跳各自页面。FAB 和首页入口卡共用这一个面板。
  */
+import type { TrainingPick } from './types';
 import AppIcon from '@/components/base/AppIcon.vue';
+import AppSheet from '@/components/overlays/AppSheet.vue';
+
+interface ITrainingAction {
+  key: TrainingPick;
+  label: string;
+  icon: string;
+  set?: 'mdi' | 'app';
+  /** 还没做的入口：降透明度 + 「即将开放」 */
+  soon?: boolean;
+}
 
 defineProps<{
   open: boolean;
@@ -50,112 +46,68 @@ defineProps<{
 
 const emit = defineEmits<{
   (e: 'close'): void;
-  (e: 'action', label: string): void;
+  (e: 'pick', key: TrainingPick): void;
 }>();
 
-const actions = [
-  { label: '练胸', icon: 'dumbbell' },
-  { label: '练腿', icon: 'dumbbell' },
-  { label: '有氧', icon: 'run' },
-  { label: '拉伸', icon: 'yoga' },
+const ACTIONS: ITrainingAction[] = [
+  { key: 'strength', label: '力量训练', icon: 'dumbbell' },
+  { key: 'cardio', label: '有氧训练', icon: 'run' },
+  { key: 'hiit', label: 'HIIT训练', icon: 'lightning-bolt' },
+  { key: 'ball', label: '球类训练', icon: 'soccer', soon: true },
+  { key: 'body', label: '身体数据', icon: 'scale-bathroom' },
+  { key: 'period', label: '经期记录', icon: 'calendar-blank-outline' },
+  { key: 'ai', label: 'AI教练', icon: 'robot-outline' },
 ];
 </script>
 
 <style lang="scss" scoped>
-.mask {
-  position: absolute;
-  inset: 0;
-  z-index: 110;
-  background-color: var(--mask);
+/* 面板按内容撑高：body 不抢剩余高度，否则最后一行会被裁掉 */
+:deep(.sheet__body) {
+  flex: 0 0 auto;
+  overflow-y: auto;
 }
 
-.sheet {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 111;
-  padding: 10px var(--sp-4) 22px;
-  background-color: var(--surface-2);
-  border-top: 1px solid var(--line-strong);
-  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--sp-2) var(--sp-3);
+  padding-bottom: var(--sp-6);
 }
 
-.sheet__grip {
-  width: 46px;
-  height: 4px;
-  margin: 0 auto 10px;
-  background-color: var(--line-strong);
-  border-radius: var(--radius-full);
-}
-
-.sheet__hd {
+.cell {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-bottom: var(--sp-3);
-}
-
-.sheet__t {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--text-1);
-}
-
-.sheet__x {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  color: var(--text-2);
-  background-color: var(--fill);
-  border-radius: var(--radius-full);
-}
-
-.sheet__grid {
-  display: flex;
-  gap: 10px;
-  padding-bottom: 14px;
-}
-
-.qk {
-  display: flex;
-  flex: 1;
   flex-direction: column;
-  gap: 6px;
+  gap: var(--sp-2);
   align-items: center;
-  padding: 12px 0;
-  background-color: var(--surface);
-  border: 1px solid var(--line);
+  padding: var(--sp-3) 0;
+  background-color: var(--fill);
   border-radius: var(--radius-md);
+
+  &.is-soon {
+    opacity: 0.62;
+  }
 }
 
-.qk__ic {
+.cell__ic {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
+  width: 32px;
+  height: 32px;
   color: var(--brand-500);
-  background-color: var(--brand-50);
-  border-radius: 10px;
 }
 
-.qk__t {
-  font-size: 11px;
+.cell__t {
+  font-size: var(--fs-xs);
+  line-height: 1.3;
   color: var(--text-1);
+  text-align: center;
 }
 
-.sheet__btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 46px;
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--on-brand);
-  background-color: var(--brand-500);
-  border-radius: var(--radius-full);
+.cell__s {
+  margin-top: -4px;
+  font-size: var(--fs-2xs);
+  line-height: 1.2;
+  color: var(--text-4);
 }
 </style>

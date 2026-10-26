@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { onHide, onLaunch, onShow } from '@dcloudio/uni-app';
+import { startNowClock } from '@/composables/useNow';
+import useTimerStore from '@/store/timer';
 import { FIRST_SCREEN_URL, getToken } from '@/utils/auth';
 
 onLaunch(() => {
@@ -7,6 +9,9 @@ onLaunch(() => {
   if (!getToken()) {
     uni.reLaunch({ url: FIRST_SCREEN_URL });
   }
+  // 全局 300ms 心跳：训练时长 / 休息计时都靠它，面板收起也不停
+  const timer = useTimerStore();
+  startNowClock(() => timer.tick());
 });
 onShow(() => {
   console.log('App Show');

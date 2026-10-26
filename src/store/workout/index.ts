@@ -3,6 +3,7 @@ import type {
   IWorkoutSet,
   IWorkoutState,
   SetDifficulty,
+  WorkoutKind,
 } from './types';
 import type { IExerciseBrief } from '@/api/exercise/types';
 
@@ -13,6 +14,14 @@ function createSet(id: string): IWorkoutSet {
   return { id, weight: 0, reps: 0, done: false };
 }
 
+/** 新建训练时标题的默认值（首页 7 项面板挑完就落这个） */
+const KIND_TITLE: Record<WorkoutKind, string> = {
+  strength: '今天 · 力量',
+  cardio: '今天 · 有氧',
+  hiit: '今天 · HIIT',
+  ball: '今天 · 球类',
+};
+
 /**
  * 训练草稿
  *
@@ -22,6 +31,7 @@ function createSet(id: string): IWorkoutSet {
 const useWorkoutStore = defineStore('workout', {
   state: (): IWorkoutState => ({
     active: false,
+    kind: null,
     title: '',
     startedAt: 0,
     pausedMs: 0,
@@ -60,9 +70,36 @@ const useWorkoutStore = defineStore('workout', {
 
     /** 一条数据都没有 */
     isEmpty: (state): boolean => state.exercises.length === 0,
+
+    /**
+     * 已训练时长（ms）：起点 startedAt，扣掉累计暂停
+     * 传 now 而不是读组件本地时间，首页胶囊与训练面板才能用同一个心跳。
+     */
+    elapsedMs: state => (now: number): number => {
+      if (!state.startedAt) return 0;
+      const end = state.paused ? state.pausedAt : now;
+      return Math.max(0, end - state.startedAt - state.pausedMs);
+    },
   },
 
   actions: {
+    /**
+     * 新建一次训练（首页 7 项面板「力量 / 有氧 / HIIT」挑完调它）
+     *
+     * 清空上一份草稿、写好默认标题，但 paused 保持 true —— 计时等用户点播放才开始。
+     */
+    startNew(kind: WorkoutKind = 'strength') {
+      this.active = true;
+      this.kind = kind;
+      this.title = KIND_TITLE[kind];
+      this.startedAt = 0;
+      this.pausedMs = 0;
+      this.paused = true;
+      this.pausedAt = 0;
+      this.exercises = [];
+      this.seq = 0;
+    },
+
     /** 从动作库选完带回来：同 id 的已经在列表里就跳过 */
     addExercises(list: IExerciseBrief[]) {
       list.forEach((exercise) => {
@@ -166,6 +203,7 @@ const useWorkoutStore = defineStore('workout', {
     /** 结束并清空 */
     reset() {
       this.active = false;
+      this.kind = null;
       this.title = '';
       this.startedAt = 0;
       this.pausedMs = 0;

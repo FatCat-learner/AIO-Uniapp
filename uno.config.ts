@@ -134,6 +134,8 @@ export default defineConfig({
     'i-mdi-chart-line',
     'i-mdi-cog-outline',
     'i-mdi-yoga',
+    // 首页 7 项训练面板（球类占位）
+    'i-mdi-soccer',
     // 本地图标集（src/static/icons，登记表 src/components/base/icons.ts）
     ...APP_ICONS.map(name => `i-app-${name}`),
   ],

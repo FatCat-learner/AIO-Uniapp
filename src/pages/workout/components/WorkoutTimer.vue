@@ -1,5 +1,5 @@
 <template>
-  <view v-if="timer.expanded" class="tm">
+  <view v-if="timer.visible && timer.expanded" class="tm">
     <view class="tm__mask" />
 
     <view class="tm__card">
@@ -87,7 +87,8 @@ const dash = computed(() => (timer.progress * CIRCUMFERENCE).toFixed(1));
 .tm {
   position: fixed;
   inset: 0;
-  z-index: 60;
+  /* 训练 sheet 传 z-index 120（压过 Dock 100），计时浮层要再高一档 */
+  z-index: 130;
   display: flex;
   align-items: center;
   justify-content: center;

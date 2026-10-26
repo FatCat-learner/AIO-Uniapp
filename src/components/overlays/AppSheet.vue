@@ -1,6 +1,6 @@
 <template>
-  <view v-if="visible" class="sheet">
-    <view class="sheet__mask" :style="{ zIndex: overlayZ('mask') }" @tap="onMaskTap" @touchmove.stop.prevent />
+  <view v-if="visible" class="sheet" :style="rootStyle">
+    <view class="sheet__mask" :style="maskStyle" @tap="onMaskTap" @touchmove.stop.prevent />
     <view
       class="sheet__panel"
       :class="[`sheet__panel--${height}`, { 'is-dragging': dragging }]"
@@ -45,8 +45,8 @@ const props = withDefaults(
     kicker?: string;
     title?: string;
     subtitle?: string;
-    /** 高度档：auto 随内容 / half 52% / mid 64% / tall 76% / full 92% */
-    height?: 'auto' | 'half' | 'mid' | 'tall' | 'full';
+    /** 高度档：auto 随内容 / half 52% / mid 64% / tall 76% / full 92% / screen 94%（训练页整屏 sheet） */
+    height?: 'auto' | 'half' | 'mid' | 'tall' | 'full' | 'screen';
     /** 右上角关闭按钮 */
     closable?: boolean;
     /** 点遮罩关闭 */
@@ -84,14 +84,28 @@ const panelHeight = computed(
       mid: '64vh',
       tall: '76vh',
       full: '92vh',
+      screen: '94vh',
     })[props.height],
 );
+
+/**
+ * 根节点必须带 zIndex：`.sheet` 是 position:fixed，自身会生成 stacking context，
+ * 只给面板设 zIndex 的话层级会被关在根节点里（auto=0），压不住 Dock(100)。
+ */
+const rootStyle = computed(() => ({
+  zIndex: props.zIndex ?? overlayZ('sheet'),
+}));
 
 const panelStyle = computed(() => ({
   zIndex: props.zIndex ?? overlayZ('sheet'),
   height: panelHeight.value,
   paddingBottom: `${kb.safeBottom}px`,
   transform: kb.height.value && props.keyboardAware ? kb.lift.value : `translateY(${dragY.value}px)`,
+}));
+
+/** 遮罩跟面板同一层、低一档：传了高于 Dock(100) 的 zIndex 时遮罩也要压上去 */
+const maskStyle = computed(() => ({
+  zIndex: props.zIndex ? props.zIndex - 1 : overlayZ('mask'),
 }));
 
 const close = (): void => {
@@ -161,7 +175,7 @@ onBeforeUnmount(() => {
   position: relative;
   display: flex;
   flex-direction: column;
-  max-height: 92vh;
+  max-height: 100vh;
   background: var(--surface);
   border-radius: var(--radius-xl) var(--radius-xl) 0 0;
   box-shadow: var(--shadow-sheet), inset 0 1px 0 var(--line-white-08);

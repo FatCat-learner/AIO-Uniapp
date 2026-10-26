@@ -1,29 +1,41 @@
-/* 训练页（workout）骨架
- * 只有布局：顶部头部与底栏各自带着自己的样式走（components/*.vue）。
- * 取值全部来自 theme.scss 令牌；尺寸对齐设计稿 ①② 屏。
+/* 训练面板（WorkoutSheet）+ /pages/workout 路由薄壳
+ * 面板本体是 src/components/overlays/AppSheet.vue，这里只管内部列布局；
+ * 取值全部来自 theme.scss 令牌，尺寸对齐设计稿 ①② 屏。
  */
-.wk {
-  display: flex;
-  flex-direction: column;
+
+/* 路由薄壳：直接跳 /pages/workout 时铺满一屏，sheet 自带遮罩 */
+.wk-page {
   height: 100vh;
   background-color: var(--bg);
 }
 
-/* nav='none' 自绘头部：自己让出状态栏高度 */
-.wk__status {
-  flex: none;
-  height: var(--status-bar-height, 0);
+/* 整屏 sheet：顶部圆角放大一档（--radius-xxl），与设计稿一致 */
+:deep(.sheet__panel) {
+  border-radius: var(--radius-xxl) var(--radius-xxl) 0 0;
 }
 
-/* 圆角面板：动作卡都在里面滚 */
+/* 训练面板自己管滚动与边距，AppSheet 的 body 只当列容器 */
+:deep(.sheet__body) {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+}
+
+.wk {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* 动作列表：面板已经是 --surface，这里不再画底 */
 .wk__sheet {
   display: flex;
   flex: 1;
   flex-direction: column;
   gap: var(--card-gap);
   min-height: 0;
-  background-color: var(--surface);
-  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
 }
 
 /* scroll-view 的内容层：内边距放这里，否则内容层宽度会把右侧 padding 吃掉 */
