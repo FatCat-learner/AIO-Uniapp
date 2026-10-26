@@ -36,7 +36,7 @@
           v-for="item in store.exercises"
           :key="item.id"
           :item="item"
-          @toggle-set="setId => store.toggleSet(item.id, setId)"
+          @toggle-set="setId => onToggleSet(item.id, setId)"
           @update-set="(setId, patch) => store.updateSet(item.id, setId, patch)"
           @difficulty="value => store.setDifficulty(item.id, value)"
           @add-set="store.addSet(item.id)"
@@ -55,6 +55,8 @@
       @note="onStub('写心得')"
       @settings="onStub('训练设置')"
     />
+
+    <WorkoutTimer />
   </view>
 </template>
 
@@ -62,22 +64,28 @@
 /**
  * 训练页（workout）· 设计稿 _design/previews/workout-flow 第 ①② 屏
  *
- * 页面只做编排：数据全在 @/store/workout（草稿，持久化），
- * 计时这里只负责「每秒把 now 推一下」，真正的 prepare/rest 状态机留给 store/timer。
+ * 页面只做编排：草稿数据在 @/store/workout（持久化），计时状态机在 @/store/timer。
+ * 这里每 300ms 推一次心跳（页面总时长 + 计时浮层的 now），组行打勾后自动起休息计时。
  *
- * 本轮范围：空态、动作卡、组行、底栏四项。完成训练 / 改标题 / 写心得
- * 等要等后端 §6.11 的写接口，先统一 toast 占位。
+ * 本轮范围：空态、动作卡、组行、底栏四项、休息/连续播放计时浮层。
+ * 完成训练 / 改标题 / 写心得 等要等后端 §6.11 的写接口，先统一 toast 占位。
  */
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import AppIcon from '@/components/base/AppIcon.vue';
+import useTimerStore from '@/store/timer';
 import useWorkoutStore from '@/store/workout';
 import WorkoutBar from './components/WorkoutBar.vue';
 import WorkoutExercise from './components/WorkoutExercise.vue';
 import WorkoutHeader from './components/WorkoutHeader.vue';
+import WorkoutTimer from './components/WorkoutTimer.vue';
+
+/** 打完一组默认歇多久（设计稿 ④ 训练设置「统一休息时间 90 秒」） */
+const REST_SECONDS = 90;
 
 const store = useWorkoutStore();
+const timer = useTimerStore();
 
-/** 每秒推一下，elapsed 才有得算（真正的计时状态机在 store/timer，这里只是心跳） */
+/** 心跳：页面总时长与计时浮层都靠它推 now */
 const now = ref(Date.now());
 let ticker: ReturnType<typeof setInterval> | undefined;
 
@@ -125,6 +133,22 @@ function onDone() {
   onStub('完成训练');
 }
 
+/** 组行打勾：变成已完成就自动起休息计时（⑦ 屏） */
+function onToggleSet(exerciseId: string, setId: string) {
+  const item = store.exercises.find(ex => ex.id === exerciseId);
+  if (!item) return;
+  const index = item.sets.findIndex(row => row.id === setId);
+  store.toggleSet(exerciseId, setId);
+  const row = item.sets.find(set => set.id === setId);
+  if (!row?.done) return;
+  timer.startRest(REST_SECONDS, {
+    exerciseId,
+    exerciseName: item.exercise.zh_name,
+    setIndex: index + 1,
+    setTotal: item.sets.length,
+  });
+}
+
 function onAddExercise() {
   uni.navigateTo({ url: '/pages/workout-picker/index' });
 }
@@ -142,7 +166,8 @@ function onStub(name: string) {
 onMounted(() => {
   ticker = setInterval(() => {
     now.value = Date.now();
-  }, 1000);
+    timer.tick();
+  }, 300);
 });
 
 onUnmounted(() => {

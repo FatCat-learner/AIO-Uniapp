@@ -23,6 +23,7 @@ export { useAuthStore };
 export { useDiscoverStore } from './discover';
 export { useHomeStore } from './home';
 export { default as useMembershipStore } from './membership';
+export { default as useTimerStore } from './timer';
 export { default as useWorkoutStore } from './workout';
 
 export default setupStore;
